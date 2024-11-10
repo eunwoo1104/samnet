@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
             UserObj user = userDAO.get(data[1]);
             String sessionKey = UUID.randomUUID().toString();
             request.getSession().setAttribute("id", user.getId());
-            request.getSession().setAttribute("session", sessionKey);
+            request.getSession().setAttribute("key", sessionKey);
             JSONObject body = new JSONObject();
             body.put("session", sessionKey);
 
