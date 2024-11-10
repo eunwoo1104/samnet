@@ -10,21 +10,42 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserDAO {
-    public String preLogin(String email) throws SQLException, NamingException {
+    public String[] preLogin(String email) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT password FROM user WHERE email=?";
+            String sql = "SELECT password, id FROM user WHERE email=?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, email);
 
             rs = stmt.executeQuery();
-            if(!rs.next()) {
+            if (!rs.next()) {
                 return null;
             }
-            return rs.getString("password");
+
+            return new String[]{rs.getString("password"), rs.getString("id")};
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public boolean exists(String email) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT id FROM user WHERE email=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, email);
+
+            rs = stmt.executeQuery();
+            return rs.next();
 
         } finally {
             if (rs != null) rs.close();
