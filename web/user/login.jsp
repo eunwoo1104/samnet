@@ -10,46 +10,50 @@
                     // don't use redirect
                     event.preventDefault();
 
-                    const submitData = {
-                        email: event.target.email.value,
-                        password: event.target.password.value,
-                    };
+                    encrypt(event.target.password.value).then(
+                        password => {
+                            const submitData = {
+                                email: event.target.email.value,
+                                password: password,
+                            };
 
-                    $.ajax({
-                        url: "${pageContext.request.contextPath}/api/login",
-                        type: "POST",
-                        dataType: "json",
-                        data: submitData,
-                        success: data => {
-                            // console.log(data)
-                            localStorage.setItem("id", data.data.id);
-                            localStorage.setItem("session", data.data.key);
-                            window.location.href = "${pageContext.request.contextPath}/index.jsp";
-                        },
-                        error: (xhr, status, error) => {
-                            // console.log(xhr);
-                            const data = xhr.responseJSON;
-                            let msg = "";
-                            switch (data.code) {
-                                case "MISSING_DATA":
-                                    msg = "해당 이메일로 가입된 계정이 없습니다.";
-                                    break;
-                                case "INVALID_DATA":
-                                    msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
-                                    break;
-                                case "CREDENTIAL_ERROR":
-                                    msg = "비밀번호가 일치하지 않습니다.";
-                                    break;
-                                default:
-                                    msg = "알 수 없는 오류가 발생하였습니다.";
-                                    break;
-                            }
-                            const msgDiv = document.getElementById("submit-message");
-                            msgDiv.children[0].innerText = msg;
-                            msgDiv.className = "error-box";
-                            msgDiv.style.display = "block";
+                            $.ajax({
+                                url: "${pageContext.request.contextPath}/api/login",
+                                type: "POST",
+                                dataType: "json",
+                                data: submitData,
+                                success: data => {
+                                    // console.log(data)
+                                    localStorage.setItem("id", data.data.id);
+                                    localStorage.setItem("session", data.data.key);
+                                    window.location.href = "${pageContext.request.contextPath}/index.jsp";
+                                },
+                                error: (xhr, status, error) => {
+                                    // console.log(xhr);
+                                    const data = xhr.responseJSON;
+                                    let msg = "";
+                                    switch (data.code) {
+                                        case "MISSING_DATA":
+                                            msg = "해당 이메일로 가입된 계정이 없습니다.";
+                                            break;
+                                        case "INVALID_DATA":
+                                            msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
+                                            break;
+                                        case "CREDENTIAL_ERROR":
+                                            msg = "비밀번호가 일치하지 않습니다.";
+                                            break;
+                                        default:
+                                            msg = "알 수 없는 오류가 발생하였습니다.";
+                                            break;
+                                    }
+                                    const msgDiv = document.getElementById("submit-message");
+                                    msgDiv.children[0].innerText = msg;
+                                    msgDiv.className = "error-box";
+                                    msgDiv.style.display = "block";
+                                }
+                            });
                         }
-                    });
+                    )
                 });
             };
         </script>
@@ -83,15 +87,17 @@
         <form>
             <label>
                 아이디 (이메일)
-                <input class="short-input mb-mid" name="email" type="email" placeholder="user@example.com" autocomplete="email" required>
+                <input class="short-input mb-mid" name="email" type="email" placeholder="user@example.com"
+                       autocomplete="email" required>
             </label>
             <label>
                 비밀번호
-                <input class="short-input" name="password" type="password" placeholder="password" autocomplete="current-password" required>
+                <input class="short-input" name="password" type="password" placeholder="password"
+                       autocomplete="current-password" required>
             </label>
             <input class="custom-button mb-mid" type="submit" value="로그인">
         </form>
-        <div class="mb-mid" style="display: none" id="submit-message" >
+        <div class="mb-mid" style="display: none" id="submit-message">
             <p>placeholder</p>
         </div>
         <p style="font-weight: 300; font-size: 0.8rem; margin: 0.3rem 0">
