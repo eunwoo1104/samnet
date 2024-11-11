@@ -122,7 +122,7 @@
       </label>
       <input class="custom-button" type="submit" value="회원가입" id="submit-input">
       <div style="display: none" id="submit-message" >
-        <p>테스트 에러 메시지</p>
+        <p>placeholder</p>
       </div>
     </form>
   </jsp:body>

@@ -35,7 +35,7 @@ public class RegisterServlet extends HttpServlet {
             if (exists) {
                 ResponseFormat.sendJSONResponse(
                         response, 400, ResponseFormat.messageResponse(
-                                400, ResponseFormat.EXISTING_RESOURCE, "Existing email"
+                                400, ResponseFormat.RESOURCE_EXISTS, "Existing email"
                         )
                 );
                 return;

@@ -9,10 +9,11 @@ import java.util.HashMap;
 public class ResponseFormat {
     public static String OK = "OK";
 
-    public static String EXISTING_RESOURCE = "RESOURCE_EXISTS";
+    public static String RESOURCE_EXISTS = "RESOURCE_EXISTS";
     public static String UNKNOWN_ERROR = "UNKNOWN_ERROR";
     public static String INVALID_DATA = "INVALID_DATA";
     public static String MISSING_DATA = "MISSING_DATA";
+    public static String CREDENTIAL_ERROR = "CREDENTIAL_ERROR";
 
     public static String response(int status, String code) {
         JSONObject obj = new JSONObject();

@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
             } else if (!data[0].equals(password)) {
                 ResponseFormat.sendJSONResponse(
                         response, 403, ResponseFormat.messageResponse(
-                                403, ResponseFormat.INVALID_DATA, "Invalid password"
+                                403, ResponseFormat.CREDENTIAL_ERROR, "Password not match"
                         )
                 );
                 return;
