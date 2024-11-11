@@ -1,5 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%
+    request.setCharacterEncoding("UTF-8");
+    String toRedirect = request.getParameter("redirect");
+    toRedirect = request.getContextPath() + (toRedirect != null ? toRedirect : "/index.jsp");
+    request.setAttribute("redirect", toRedirect);
+%>
 <t:layout pageName="로그인">
     <jsp:attribute name="head">
         <script>
@@ -24,9 +30,8 @@
                                 data: submitData,
                                 success: data => {
                                     // console.log(data)
-                                    localStorage.setItem("id", data.data.id);
-                                    localStorage.setItem("session", data.data.key);
-                                    window.location.href = "${pageContext.request.contextPath}/index.jsp";
+                                    localStorage.setItem("session", data.data.session);
+                                    window.location.href = "${redirect}";
                                 },
                                 error: (xhr, status, error) => {
                                     // console.log(xhr);
@@ -58,18 +63,6 @@
             };
         </script>
       <style>
-          h2 {
-              display: block;
-              text-align: center;
-              line-height: 4rem;
-              font-size: 2rem;
-          }
-
-          form > label {
-              font-weight: 400;
-              line-height: 1.5rem;
-          }
-
           form > input[type=submit] {
               margin-top: 1.25rem;
           }
@@ -87,12 +80,12 @@
         <form>
             <label>
                 아이디 (이메일)
-                <input class="short-input mb-mid" name="email" type="email" placeholder="user@example.com"
+                <input class="mb-mid" name="email" type="email" placeholder="user@example.com"
                        autocomplete="email" required>
             </label>
             <label>
                 비밀번호
-                <input class="short-input" name="password" type="password" placeholder="password"
+                <input name="password" type="password" placeholder="password"
                        autocomplete="current-password" required>
             </label>
             <input class="custom-button mb-mid" type="submit" value="로그인">

@@ -77,18 +77,6 @@
             }
         </script>
       <style>
-          h2 {
-              display: block;
-              text-align: center;
-              line-height: 4rem;
-              font-size: 2rem;
-          }
-
-          form > label {
-              font-weight: 400;
-              line-height: 1.5rem;
-          }
-
           form > input[type=submit] {
               margin-top: 1.25rem;
           }
@@ -107,26 +95,26 @@
         <form>
             <label>
                 아이디 (이메일)
-                <input class="short-input mb-mid" name="email" type="email" placeholder="user@example.com"
+                <input class="mb-mid" name="email" type="email" placeholder="user@example.com"
                        autocomplete="email" required>
             </label>
             <label>
                 비밀번호
-                <input class="short-input mb-mid" name="password" type="password" placeholder="비밀번호" id="pw"
+                <input class="mb-mid" name="password" type="password" placeholder="비밀번호" id="pw"
                        autocomplete="new-password" required>
             </label>
             <label>
                 비밀번호 확인
-                <input class="short-input mb-mid" name="repassword" type="password" placeholder="비밀번호 재입력" id="rpw"
+                <input class="mb-mid" name="repassword" type="password" placeholder="비밀번호 재입력" id="rpw"
                        autocomplete="new-password" required>
             </label>
             <label>
                 닉네임 (표시할 이름)
-                <input class="short-input mb-mid" name="nickname" type="text" placeholder="닉네임" required>
+                <input class="mb-mid" name="nickname" type="text" placeholder="닉네임" required>
             </label>
             <label>
                 유저네임
-                <input class="short-input" name="username" type="text" placeholder="유저네임" required>
+                <input name="username" type="text" placeholder="유저네임" required>
             </label>
             <input class="custom-button" type="submit" value="회원가입" id="submit-input">
             <div style="display: none" id="submit-message">

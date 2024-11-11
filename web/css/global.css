@@ -24,7 +24,7 @@ a, a:visited {
     color: inherit;
 }
 
-input, label {
+input, label, textarea {
     display: block;
 }
 
@@ -34,8 +34,8 @@ input, button {
     border-style: solid;
 }
 
-header, footer, .content {
-    padding: 0 1.75rem;
+input[type="file"] {
+    display: none;
 }
 
 /* Template Area */
@@ -67,6 +67,22 @@ footer > p {
     font-size: 0.8rem
 }
 
+header, footer, .content {
+    padding: 0 1.75rem;
+}
+
+h2 {
+    display: block;
+    text-align: center;
+    line-height: 4rem;
+    font-size: 2rem;
+}
+
+form > label {
+    font-weight: 400;
+    line-height: 1.5rem;
+}
+
 .content {
     float: left;
     width: 100%;
@@ -79,11 +95,11 @@ footer > p {
     color: snow;
 }
 
-.short-input {
+input:not([type="submit"]), textarea {
     width: 100%;
     box-sizing: border-box;
-    line-height: 2rem;
-    padding: 0.1rem 0.3rem;
+    /* line-height: 2rem; */
+    padding: 0.5rem;
     background-color: #1b1e23;
     border-radius: 0.25rem;
     outline: none;
@@ -93,10 +109,15 @@ footer > p {
     caret-color: snow;
 }
 
+textarea {
+    line-height: 1rem;
+}
+
 .custom-button {
     width: 100%;
     box-sizing: border-box;
     line-height: 2rem;
+    padding: 0.5rem;
     background-color: transparent;
     border-radius: 0.25rem;
     outline: none;
@@ -141,8 +162,20 @@ footer > p {
     font-weight: 300;
 }
 
+.mt-mid {
+    margin-top: 0.7rem;
+}
+
 .mb-mid {
     margin-bottom: 0.7rem;
+}
+
+.mt-xl {
+    margin-top: 2rem;
+}
+
+.mb-xl {
+    margin-bottom: 2rem;
 }
 
 .ok-box {

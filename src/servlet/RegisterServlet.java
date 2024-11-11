@@ -41,6 +41,7 @@ public class RegisterServlet extends HttpServlet {
                 return;
             }
 
+            // TODO: extra encryption to password such as pbkdf2
             boolean res = userDAO.insert(email, password, nickname, username);
             int status = res ? 200 : 400;
 
