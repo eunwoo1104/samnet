@@ -10,6 +10,7 @@ body {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR",
     "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    word-break: keep-all;
 }
 
 h1, h2, h3, h4, p {
@@ -24,7 +25,17 @@ a, a:visited {
 }
 
 input, label {
-    display:block;
+    display: block;
+}
+
+input {
+    /* outline: none; */
+    border-width: 0;
+    border-style: solid;
+}
+
+header, footer, .content {
+    padding: 0 1.75rem;
 }
 
 /* Template Area */
@@ -38,8 +49,6 @@ header {
     color: white;
     text-align: center;
     line-height: 3.4rem;
-    padding-left: 1.5rem;
-    padding-right: 1.75rem;
 }
 
 footer {
@@ -60,9 +69,52 @@ footer > p {
 .content {
     float: left;
     width: 100%;
-    margin-top: 3.4rem;
-    margin-bottom: 3rem;
+    min-height: 100vh;
+    padding-top: 3.4rem;
+    padding-bottom: 3rem;
     overflow: hidden;
+    box-sizing: border-box;
+    background-color: #2C2F33;
+    color: snow;
+}
+
+.short-input {
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 2rem;
+    padding: 0.1rem 0.3rem;
+    background-color: #1b1e23;
+    border-radius: 0.25rem;
+    outline: none;
+    border-width: 1px;
+    border-color: dimgrey;
+    color: snow;
+    caret-color: snow;
+}
+
+.custom-button {
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 2rem;
+    background-color: transparent;
+    border-radius: 0.25rem;
+    outline: none;
+    border-width: 1px;
+    border-color: snow;
+    color: snow;
+}
+
+.custom-button:hover:enabled {
+    opacity: 75%;
+    cursor: pointer;
+}
+
+.custom-button:focus-visible {
+    opacity: 75%;
+}
+
+.custom-button:disabled {
+    opacity: 50%;
 }
 
 /* Macro Area */
@@ -75,6 +127,11 @@ footer > p {
     flex-direction: row;
 }
 
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
 .text-light-white {
     color: #fbfbfb;
 }
@@ -82,3 +139,35 @@ footer > p {
 .font-light {
     font-weight: 300;
 }
+
+.mb-mid {
+    margin-bottom: 0.7rem;
+}
+
+.ok-box {
+    border-radius: 0.25rem;
+    outline: none;
+    border-width: 1px;
+    background-color: springgreen;
+    color: darkgreen;
+}
+
+.error-box {
+    border-radius: 0.25rem;
+    outline: none;
+    border-width: 1px;
+    background-color: lightcoral;
+    color: darkred;
+}
+
+.clickable {}
+
+.clickable:hover {
+    opacity: 75%;
+    cursor: pointer;
+}
+
+.clickable:focus-visible {
+    opacity: 75%;
+}
+
