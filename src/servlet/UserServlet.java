@@ -26,7 +26,8 @@ public class UserServlet extends HttpServlet {
         }
 
         String keyFromClient = request.getHeader("Authorization");
-        if (keyFromClient == null || !keyFromClient.equals(keyFromSession)) {
+        String targetUser = request.getParameter("user");
+        if (targetUser == null && (keyFromClient == null || !keyFromClient.equals(keyFromSession))) {
             ResponseFormat.sendJSONResponse(
                     response, 403, ResponseFormat.messageResponse(
                             403, ResponseFormat.INVALID_SESSION, "Session not match"
@@ -37,7 +38,13 @@ public class UserServlet extends HttpServlet {
 
         try {
             UserDAO userDAO = new UserDAO();
-            UserObj user = userDAO.get((String) request.getSession().getAttribute("id"));
+            String target;
+            if (targetUser != null) {
+                target = targetUser;
+            } else {
+                target = (String) request.getSession().getAttribute("id");
+            }
+            UserObj user = userDAO.get(target);
 
             ResponseFormat.sendJSONResponse(
                     response, 200, ResponseFormat.response(

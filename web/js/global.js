@@ -18,11 +18,3 @@ async function encrypt(text) {
                 .join("");
         });
 }
-
-const AJAX = {
-    call: (url, body, ok, err) => {
-        $.ajax(
-            {}
-        )
-    }
-}
