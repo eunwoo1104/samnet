@@ -9,7 +9,34 @@
 <t:layout pageName="피드 추가">
     <jsp:attribute name="head">
         <script>
+            const sessionKey = localStorage.getItem("session");
+            if (!sessionKey) {
+                alert("세션 오류로 다시 로그인해주세요.");
+                moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp");
+            }
+
             window.onload = () => {
+                const userInfo = document.getElementById("user-info")
+                $.ajax(
+                    {
+                        url: "${pageContext.request.contextPath}/api/user",
+                        type: "GET",
+                        dataType: "json",
+                        beforeSend: xhr => {
+                            xhr.setRequestHeader("Authorization", sessionKey);
+                        },
+                        success: data => {
+                            const user = data.data;
+                            userInfo.innerHTML = "<span class='bold'>@" + user.username + "(" + user.email + ")</span>로 로그인됨";
+                        },
+                        error: (xhr, status, error) => {
+                            // TODO: different error messages per error codes
+                            alert("세션 오류로 다시 로그인해주세요.");
+                            moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp");
+                        }
+                    }
+                )
+
                 const fileInput = document.getElementById("file");
 
                 fileInput.addEventListener("change", event => {
@@ -69,6 +96,8 @@
                 color: snow;
                 caret-color: snow;
                 text-align: center;
+                font-weight: 300;
+                font-size: 0.8rem;
             }
 
             .upload-label:hover {
@@ -82,7 +111,7 @@
 
             .file-names {
                 font-weight: 300;
-                font-size: 0.9rem;
+                font-size: 0.8rem;
                 color: #fbfbfb;
                 opacity: 75%;
             }
@@ -98,12 +127,26 @@
                 display: inline-block;
                 height: 10rem;
             }
+
+            .user-info-container {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .user-info {
+                font-size: 0.8rem;
+                opacity: 80%;
+            }
         </style>
     </jsp:attribute>
     <jsp:body>
         <h2>
             피드 추가
         </h2>
+        <div class="user-info-container mb-sm">
+            <p class="user-info" id="user-info"></p>
+            <a class="user-info" href="${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp">본인이 아닌가요?</a>
+        </div>
         <form>
             <label class="mb-mid">
                 오늘 준비한 피드는 뭔가요?

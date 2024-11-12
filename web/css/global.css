@@ -75,7 +75,7 @@ h2 {
     display: block;
     text-align: center;
     line-height: 4rem;
-    font-size: 2rem;
+    font-size: 1.75rem;
 }
 
 form > label {
@@ -162,8 +162,16 @@ textarea {
     font-weight: 300;
 }
 
-.mt-mid {
+.mt-sm {
     margin-top: 0.7rem;
+}
+
+.mb-sm {
+    margin-bottom: 0.5rem;
+}
+
+.mt-mid {
+    margin-top: 0.5rem;
 }
 
 .mb-mid {
@@ -203,5 +211,9 @@ textarea {
 
 .clickable:focus-visible {
     opacity: 75%;
+}
+
+.bold {
+    font-weight: 600;
 }
 
