@@ -73,7 +73,8 @@ public class UserDAO {
                     rs.getString("nickname"),
                     rs.getString("username"),
                     rs.getString("bio"),
-                    rs.getString("created_at")
+                    rs.getString("created_at"),
+                    rs.getInt("flag")
             );
 
         } finally {
@@ -100,7 +101,8 @@ public class UserDAO {
                         rs.getString("nickname"),
                         rs.getString("username"),
                         rs.getString("bio"),
-                        rs.getString("created_at")
+                        rs.getString("created_at"),
+                        rs.getInt("flag")
                 ));
             }
 
