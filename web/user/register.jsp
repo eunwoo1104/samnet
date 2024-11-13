@@ -19,6 +19,9 @@
                                 username: event.target.username.value,
                             }
 
+                            const submit = document.getElementById("submit-input");
+                            submit.disabled = "disabled";
+
                             $.ajax({
                                 url: "${pageContext.request.contextPath}/api/register",
                                 type: "POST",
@@ -30,9 +33,6 @@
                                     msgDiv.children[0].innerText = "성공적으로 가입했습니다. 잠시 후 로그인 페이지로 이동합니다.";
                                     msgDiv.className = "ok-box";
                                     msgDiv.style.display = "block";
-
-                                    const submit = document.getElementById("submit-input");
-                                    submit.disabled = "disabled";
 
                                     sleep(3 * 1000).then(() => {
                                         window.location.href = "${pageContext.request.contextPath}/user/login.jsp";
@@ -57,6 +57,7 @@
                                     msgDiv.children[0].innerText = msg;
                                     msgDiv.className = "error-box";
                                     msgDiv.style.display = "block";
+                                    submit.disabled = null;
                                 }
                             });
                         }

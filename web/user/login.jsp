@@ -23,6 +23,9 @@
                                 password: password,
                             };
 
+                            const submit = document.getElementById("submit-input");
+                            submit.disabled = "disabled";
+
                             $.ajax({
                                 url: "${pageContext.request.contextPath}/api/login",
                                 type: "POST",
@@ -55,6 +58,7 @@
                                     msgDiv.children[0].innerText = msg;
                                     msgDiv.className = "error-box";
                                     msgDiv.style.display = "block";
+                                    submit.disabled = null;
                                 }
                             });
                         }
@@ -88,7 +92,7 @@
                 <input name="password" type="password" placeholder="password"
                        autocomplete="current-password" required>
             </label>
-            <input class="custom-button mb-mid" type="submit" value="로그인">
+            <input class="custom-button mb-mid" type="submit" value="로그인" id="submit-input">
         </form>
         <div class="mb-mid" style="display: none" id="submit-message">
             <p>placeholder</p>

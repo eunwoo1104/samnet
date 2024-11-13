@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ResponseFormat {
-    public static String OK = "OK";
+    public final static String OK = "OK";
 
     public final static String RESOURCE_EXISTS = "RESOURCE_EXISTS";
     public final static String UNKNOWN_ERROR = "UNKNOWN_ERROR";
@@ -16,6 +16,7 @@ public class ResponseFormat {
     public final static String CREDENTIAL_ERROR = "CREDENTIAL_ERROR";
     public final static String NO_SESSION = "NO_SESSION";
     public final static String INVALID_SESSION = "INVALID_SESSION";
+    public final static String USER_BLOCKED = "USER_BLOCKED";
 
     public static String response(int status, String code) {
         JSONObject obj = new JSONObject();

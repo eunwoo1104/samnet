@@ -27,6 +27,7 @@ public class FeedDAO {
                     rs.getString("idx"),
                     rs.getString("user"),
                     rs.getString("content"),
+                    rs.getString("images"),
                     rs.getString("created_at")
             );
 
@@ -52,6 +53,7 @@ public class FeedDAO {
                         rs.getString("idx"),
                         rs.getString("user"),
                         rs.getString("content"),
+                        rs.getString("images"),
                         rs.getString("created_at")
                 ));
             }
@@ -65,18 +67,20 @@ public class FeedDAO {
         }
     }
 
-    public boolean insert(String uid, String content) throws NamingException, SQLException {
+    public String insert(String uid, String content, String images) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         try {
-            String sql = "INSERT INTO feed(user, content) VALUES(?, ?)";
-            stmt = conn.prepareStatement(sql);
+            String sql = "INSERT INTO feed(user, content, images) VALUES(?, ?, ?)";
+            stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, uid);
             stmt.setString(2, content);
+            stmt.setString(3, images);
 
-            int count = stmt.executeUpdate();
-            return count == 1;
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            return rs.next() ? rs.getString(1) : null;
 
         } finally {
             if(stmt != null) stmt.close();
