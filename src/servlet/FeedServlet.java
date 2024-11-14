@@ -7,10 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.FeedDAO;
-import dao.ImageDAO;
-import dao.UserDAO;
-import dao.UserObj;
+import dao.*;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -22,7 +19,45 @@ import util.ResponseFormat;
 public class FeedServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
 
+        String feedId = request.getParameter("id");
+        if (feedId == null || feedId.isBlank()) {
+            ResponseFormat.sendJSONResponse(
+                    response, 404, ResponseFormat.messageResponse(
+                            404, ResponseFormat.MISSING_DATA, "Email not found"
+                    )
+            );
+            return;
+        }
+
+        try {
+            FeedDAO feedDAO = new FeedDAO();
+            FeedObj feed = feedDAO.get(feedId);
+            if (feed == null) {
+                ResponseFormat.sendJSONResponse(
+                        response, 404, ResponseFormat.messageResponse(
+                                404, ResponseFormat.MISSING_DATA, "Email not found"
+                        )
+                );
+                return;
+            }
+
+            ResponseFormat.sendJSONResponse(
+                    response, 200, ResponseFormat.response(
+                            200, ResponseFormat.OK, feed.toJSON()
+                    )
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            ResponseFormat.sendJSONResponse(
+                    response, 500, ResponseFormat.messageResponse(
+                            500, ResponseFormat.UNKNOWN_ERROR, "SQL Error"
+                    )
+            );
+        }
     }
 
     @Override

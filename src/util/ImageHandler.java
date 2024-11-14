@@ -18,4 +18,12 @@ public class ImageHandler {
 
         return fname;
     }
+
+    public static File getImage(String fname) {
+        File savedFile = new File(SAVE_LOCATION + fname);
+        if (!savedFile.exists()) {
+            return null;
+        }
+        return savedFile;
+    }
 }

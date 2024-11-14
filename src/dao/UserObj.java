@@ -79,6 +79,7 @@ public class UserObj {
         body.put("nickname", nickname);
         body.put("username", username);
         body.put("bio", bio);
+        body.put("avatar", avatar);
         body.put("createdAt", createdAt);
         body.put("flag", flag);
 

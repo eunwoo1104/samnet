@@ -1,5 +1,7 @@
 package dao;
 
+import org.json.simple.JSONObject;
+
 public class FeedObj {
     private String idx, user, content, images, replyOf, createdAt;
 
@@ -45,5 +47,17 @@ public class FeedObj {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject body = new JSONObject();
+        body.put("idx", idx);
+        body.put("user", user);
+        body.put("content", content);
+        body.put("images", images);
+        body.put("replyOf", replyOf);
+        body.put("createdAt", createdAt);
+
+        return body;
     }
 }

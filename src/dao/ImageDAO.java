@@ -28,4 +28,28 @@ public class ImageDAO {
             if(conn != null) conn.close();
         }
     }
+
+    public String get(String idx) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT dir FROM image WHERE idx=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, idx);
+
+            rs = stmt.executeQuery();
+            if (!rs.next()) {
+                return null;
+            }
+
+            return rs.getString("dir");
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
 }

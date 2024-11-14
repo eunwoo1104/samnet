@@ -31,11 +31,30 @@
         <script type="module" src="https://md-block.verou.me/md-block.js"></script>
         --%>
         <script>
+            // TODO: consider safer method
+            const feed = JSON.parse('${feed.toJSON()}');
+            const author = JSON.parse('${author.toJSON()}');
+
             window.onload = () => {
+                const imageContainer = document.getElementById("image-container");
                 const nickname = document.getElementById("nickname");
                 // const username = document.getElementById("username");
                 nickname.textContent = limitTextLength(nickname.textContent, 20);
                 // username.textContent = limitTextLength(username.textContent, 20);
+                let imgIncluded = false;
+                feed.images.split(",").forEach(img => {
+                    if (!img) return;
+                    const imgURL = "${pageContext.request.contextPath}/resource/image?id=" + img;
+                    const imgChild = document.createElement("img");
+                    imgChild.setAttribute("src", imgURL);
+                    imgChild.setAttribute("alt", img);
+                    imgChild.className = "image";
+                    imageContainer.appendChild(imgChild);
+                    imgIncluded = true;
+                });
+                if (imgIncluded) {
+                    imageContainer.style = null;
+                }
             };
         </script>
         <style>
@@ -70,6 +89,20 @@
             .context {
                 font-weight: 450;
             }
+
+            .image-container {
+                display: inline-flex;
+                flex-wrap: nowrap;
+                overflow-x: scroll;
+                overflow-y: hidden;
+                gap: 5px;
+            }
+
+            .image {
+                display: inline-block;
+                width: 100%;
+                max-height: 20rem;
+            }
         </style>
     </jsp:attribute>
     <jsp:body>
@@ -77,7 +110,7 @@
             <div class="flex-row clickable">
                 <span class="material-icons" style="margin-right: 4px">account_circle</span>
                 <%-- TODO: avatar image --%>
-                <p class="author bold mb-xs">
+                <p class="author bold mb-sm">
                     <span id="nickname">${author.safeNickname}</span>
                 </p>
             </div>
@@ -85,6 +118,7 @@
             <p class="context">
                 ${feed.safeContent}
             </p>
+            <div class="image-container mt-xs" style="display: none" id="image-container"></div>
         </div>
     </jsp:body>
 </t:layout>
