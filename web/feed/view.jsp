@@ -39,7 +39,7 @@
                 const imageContainer = document.getElementById("image-container");
                 const nickname = document.getElementById("nickname");
                 // const username = document.getElementById("username");
-                nickname.textContent = limitTextLength(nickname.textContent, 20);
+                nickname.textContent = limitTextLength(nickname.textContent.trim(), 20);
                 // username.textContent = limitTextLength(username.textContent, 20);
                 let imgIncluded = false;
                 feed.images.split(",").forEach(img => {
@@ -77,6 +77,14 @@
             }
             */
 
+            .author-container {
+                display: inline-flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
             .author {
                 color: white;
                 font-size: 1.3rem;
@@ -103,22 +111,41 @@
                 width: 100%;
                 max-height: 20rem;
             }
+
+            .buttons-layout {
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                gap: 4px
+            }
         </style>
     </jsp:attribute>
     <jsp:body>
-        <div class="container mt-lg">
-            <div class="flex-row clickable">
+        <div class="mt-lg"></div>
+        <div class="container">
+            <div class="author-container clickable mb-sm">
                 <span class="material-icons" style="margin-right: 4px">account_circle</span>
                 <%-- TODO: avatar image --%>
-                <p class="author bold mb-sm">
-                    <span id="nickname">${author.safeNickname}</span>
+                <p class="author bold" id="nickname">
+                    ${author.safeNickname}
                 </p>
             </div>
-            <%-- <span id="username">@${author.username}</span> --%>
             <p class="context">
                 ${feed.safeContent}
             </p>
             <div class="image-container mt-xs" style="display: none" id="image-container"></div>
+        </div>
+        <div class="flex-row mt-mid" style="gap: 10px">
+            <div class="flex-row buttons-layout clickable" id="like">
+                <%-- color: red, favorite --%>
+                <span class="material-icons">favorite_border</span>
+                <p>0개</p>
+            </div>
+            <div class="flex-row buttons-layout clickable" id="reply">
+                    <%-- color: red, favorite --%>
+                <span class="material-icons">reply</span>
+                <p>답장하기</p>
+            </div>
         </div>
     </jsp:body>
 </t:layout>

@@ -154,6 +154,11 @@ textarea {
     flex-direction: column;
 }
 
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
 .text-light-white {
     color: #fbfbfb;
 }
