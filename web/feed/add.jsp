@@ -110,7 +110,7 @@
                                 msgDiv.style.display = "block";
 
                                 sleep(3 * 1000).then(() => {
-                                    window.location.href = "${pageContext.request.contextPath}/feed/index.jsp?id=" + feedId;
+                                    window.location.href = "${pageContext.request.contextPath}/feed/view.jsp?id=" + feedId;
                                 });
                             },
                             error: (xhr, status, error) => {

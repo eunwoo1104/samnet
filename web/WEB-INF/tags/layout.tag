@@ -1,5 +1,6 @@
 <%@tag description="Main Layout" language="java" pageEncoding="UTF-8" %>
 <%@attribute name="pageName" required="false" %>
+<%@attribute name="fillBlank" required="false" %>
 <%@attribute name="head" fragment="true" required="false" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -28,7 +29,9 @@
 </header>
 <div class="content flex-col">
     <jsp:doBody/>
+    <% if (fillBlank == null || fillBlank.equals("true")) { %>
     <div style="flex-grow: 1;"></div>
+    <% } %>
 </div>
 <footer class="text-light-white">
     <%-- copyright and link area --%>
