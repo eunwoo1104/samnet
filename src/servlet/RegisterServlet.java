@@ -28,6 +28,15 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+        if (!username.matches("$[a-zA-Z]^")) {
+            ResponseFormat.sendJSONResponse(
+                    response, 400, ResponseFormat.messageResponse(
+                            400, ResponseFormat.INVALID_DATA, "Unallowed pattern included"
+                    )
+            );
+            return;
+        }
+
         try {
             UserDAO userDAO = new UserDAO();
 

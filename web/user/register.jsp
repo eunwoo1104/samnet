@@ -115,7 +115,7 @@
             </label>
             <label>
                 유저네임
-                <input name="username" type="text" placeholder="유저네임" required>
+                <input name="username" type="text" placeholder="유저네임" pattern="^[a-zA-Z]+$" required>
             </label>
             <input class="custom-button" type="submit" value="회원가입" id="submit-input">
             <div style="display: none" id="submit-message">

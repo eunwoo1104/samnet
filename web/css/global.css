@@ -162,8 +162,16 @@ textarea {
     font-weight: 300;
 }
 
+.mt-xs {
+    margin-top: 0.3rem;
+}
+
+.mb-xs {
+    margin-bottom: 0.3rem;
+}
+
 .mt-sm {
-    margin-top: 0.7rem;
+    margin-top: 0.5rem;
 }
 
 .mb-sm {
@@ -171,7 +179,7 @@ textarea {
 }
 
 .mt-mid {
-    margin-top: 0.5rem;
+    margin-top: 0.7rem;
 }
 
 .mb-mid {

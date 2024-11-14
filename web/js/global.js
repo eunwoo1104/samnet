@@ -6,6 +6,20 @@ function moveto(url) {
     window.location.href = url;
 }
 
+function escapeHTML(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function limitTextLength(text, maxSize) {
+    if (text.length <= maxSize) return text;
+    return text.substring(0, maxSize-3) + "...";
+}
+
 async function encrypt(text) {
     const encoder = new TextEncoder();
     const pwEncode = encoder.encode(text);

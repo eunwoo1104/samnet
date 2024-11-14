@@ -28,6 +28,7 @@ public class FeedDAO {
                     rs.getString("user"),
                     rs.getString("content"),
                     rs.getString("images"),
+                    rs.getString("reply_of"),
                     rs.getString("created_at")
             );
 
@@ -54,6 +55,7 @@ public class FeedDAO {
                         rs.getString("user"),
                         rs.getString("content"),
                         rs.getString("images"),
+                        rs.getString("reply_of"),
                         rs.getString("created_at")
                 ));
             }

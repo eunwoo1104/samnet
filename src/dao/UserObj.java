@@ -3,19 +3,20 @@ package dao;
 import org.json.simple.JSONObject;
 
 public class UserObj {
-    private String id, email, nickname, username, bio, createdAt;
+    private String id, email, nickname, username, bio, avatar, createdAt;
     private int flag;
 
     private final int ADMIN = 1 << 0;
     private final int VERIFIED = 1 << 1;
     private final int BLOCKED = 1 << 2;
 
-    public UserObj(String id, String email, String nickname, String username, String bio, String createdAt, int flag) {
+    public UserObj(String id, String email, String nickname, String username, String bio, String avatar, String createdAt, int flag) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.username = username;
         this.bio = bio;
+        this.avatar = avatar;
         this.createdAt = createdAt;
         this.flag = flag;
     }
@@ -32,12 +33,27 @@ public class UserObj {
         return nickname;
     }
 
+    public String getSafeNickname() {
+        String res = nickname;
+        res = res.replace("&", "&amp;");
+        res = res.replace("<", "&lt;");
+        res = res.replace(">", "&gt;");
+        res = res.replace("\"", "&quot;");
+        res = res.replace("'", "&#039;");
+
+        return res;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public String getBio() {
         return bio;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public String getCreatedAt() {
