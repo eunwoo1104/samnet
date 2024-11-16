@@ -1,0 +1,53 @@
+.feed-container {
+    border-style: solid;
+    outline: none;
+    border-width: 1px 0;
+    border-color: dimgrey;
+    padding: 0.7rem 0;
+}
+
+/*
+use on desktop
+{
+    border-radius: 0.25rem;
+    border-style: solid;
+    outline: none;
+    border-width: 1px;
+    border-color: dimgrey;
+}
+*/
+
+.feed-author-container {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.feed-author {
+    color: white;
+    font-size: 1.3rem;
+}
+
+.feed-author > #username {
+    opacity: 80%;
+}
+
+.feed-context {
+    font-weight: 450;
+}
+
+.feed-image-container {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    gap: 5px;
+}
+
+.feed-image {
+    display: inline-block;
+    width: 100%;
+    max-height: 20rem;
+}

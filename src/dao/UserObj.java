@@ -33,17 +33,6 @@ public class UserObj {
         return nickname;
     }
 
-    public String getSafeNickname() {
-        String res = nickname;
-        res = res.replace("&", "&amp;");
-        res = res.replace("<", "&lt;");
-        res = res.replace(">", "&gt;");
-        res = res.replace("\"", "&quot;");
-        res = res.replace("'", "&#039;");
-
-        return res;
-    }
-
     public String getUsername() {
         return username;
     }

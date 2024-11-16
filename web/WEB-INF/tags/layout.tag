@@ -11,8 +11,10 @@
     <meta charset="utf-8"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/global.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/component.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/global.js"></script>
+    <script src="${pageContext.request.contextPath}/js/component.js"></script>
     <jsp:invoke fragment="head"/>
 </head>
 <body>

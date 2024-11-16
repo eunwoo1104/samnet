@@ -26,17 +26,6 @@ public class FeedObj {
         return content;
     }
 
-    public String getSafeContent() {
-        String res = content;
-        res = res.replace("&", "&amp;");
-        res = res.replace("<", "&lt;");
-        res = res.replace(">", "&gt;");
-        res = res.replace("\"", "&quot;");
-        res = res.replace("'", "&#039;");
-
-        return res;
-    }
-
     public String getImages() {
         return images;
     }
