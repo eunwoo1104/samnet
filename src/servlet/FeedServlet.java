@@ -25,7 +25,7 @@ public class FeedServlet extends HttpServlet {
         if (feedId == null || feedId.isBlank()) {
             ResponseFormat.sendJSONResponse(
                     response, 404, ResponseFormat.messageResponse(
-                            404, ResponseFormat.MISSING_DATA, "Email not found"
+                            404, ResponseFormat.INVALID_DATA, "Feed ID missing"
                     )
             );
             return;
@@ -37,7 +37,7 @@ public class FeedServlet extends HttpServlet {
             if (feed == null) {
                 ResponseFormat.sendJSONResponse(
                         response, 404, ResponseFormat.messageResponse(
-                                404, ResponseFormat.MISSING_DATA, "Email not found"
+                                404, ResponseFormat.MISSING_DATA, "Feed not found"
                         )
                 );
                 return;
@@ -121,6 +121,7 @@ public class FeedServlet extends HttpServlet {
 
         ServletFileUpload sfu = new ServletFileUpload(new DiskFileItemFactory());
         String content = null;
+        String replyOf = null;
         ArrayList<String> files = new ArrayList<>();
         try {
             List<FileItem> items = sfu.parseRequest(request);
@@ -128,7 +129,9 @@ public class FeedServlet extends HttpServlet {
                 if (item.isFormField()) {
                     String name = item.getFieldName();
                     if (name.equals("content")) {
-                        content = item.getString("UTF-8");
+                        content = item.getString("UTF-8").trim();
+                    } else if (name.equals("replyOf")) {
+                        replyOf = item.getString("UTF-8").trim();
                     }
                 }
                 else {
@@ -163,7 +166,7 @@ public class FeedServlet extends HttpServlet {
             }
 
             FeedDAO feedDAO = new FeedDAO();
-            String feedId = feedDAO.insert(user.getId(), content.trim(), imageList.toString());
+            String feedId = feedDAO.insert(user.getId(), content, imageList.toString(), replyOf);
             if (feedId != null) {
                 JSONObject body = new JSONObject();
                 body.put("id", feedId);

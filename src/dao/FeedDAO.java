@@ -3,14 +3,11 @@ package dao;
 import util.ConnectionPool;
 
 import javax.naming.NamingException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class FeedDAO {
-    public FeedObj get(String fno) throws SQLException, NamingException {
+    public FeedObj get(String idx) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -18,7 +15,7 @@ public class FeedDAO {
             String sql = "SELECT * FROM feed WHERE idx=?";
             stmt = conn.prepareStatement(sql);
 
-            stmt.setString(1, fno);
+            stmt.setString(1, idx);
 
             rs = stmt.executeQuery();
             if (!rs.next()) return null;
@@ -69,16 +66,37 @@ public class FeedDAO {
         }
     }
 
-    public String insert(String uid, String content, String images) throws NamingException, SQLException {
+    public boolean exists(String idx) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT idx FROM feed WHERE idx=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, idx);
+
+            rs = stmt.executeQuery();
+            return rs.next();
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public String insert(String uid, String content, String images, String replyOf) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         try {
-            String sql = "INSERT INTO feed(user, content, images) VALUES(?, ?, ?)";
+            String sql = "INSERT INTO feed(user, content, images, reply_of) VALUES(?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, uid);
             stmt.setString(2, content);
             stmt.setString(3, images);
+            stmt.setString(4, replyOf);
 
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
@@ -111,6 +129,47 @@ public class FeedDAO {
     }
 
     // TODO: add updates for future columns
+
+    public int[] toggleHeart(String idx, String uid) throws NamingException, SQLException {
+        Connection conn = ConnectionPool.get();
+        CallableStatement stmt = null;
+        try {
+            String sql = "CALL toggleHeart(?, ?, ?, ?)";
+            stmt = conn.prepareCall(sql);
+
+            stmt.setString(1, uid);
+            stmt.setString(2, idx);
+            stmt.registerOutParameter(3, Types.BOOLEAN);
+            stmt.registerOutParameter(4, Types.INTEGER);
+
+            stmt.execute();
+            return new int[]{stmt.getBoolean(3) ? 1 : 0, stmt.getInt(4)};
+        } finally {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public int getHeartCount(String idx) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT COUNT(*) as count FROM heart WHERE feed=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, idx);
+
+            rs = stmt.executeQuery();
+            if (!rs.next()) return 0;
+
+            return rs.getInt("count");
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
 
     public boolean delete(String idx, String uid) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();

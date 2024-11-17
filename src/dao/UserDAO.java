@@ -179,6 +179,27 @@ public class UserDAO {
         }
     }
 
+    public boolean likedToFeed(String uid, String idx) throws NamingException, SQLException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT feed FROM heart WHERE feed=? AND user=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, idx);
+            stmt.setString(2, uid);
+
+            rs = stmt.executeQuery();
+            return rs.next();
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
     public boolean delete(String uid) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;

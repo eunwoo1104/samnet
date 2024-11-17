@@ -1,10 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%
+    String extraParam = "%3F";
+    String maybeReply = request.getParameter("reply");
+    if (maybeReply != null && !maybeReply.isBlank()) {
+        extraParam += "reply=" + maybeReply.trim();
+    }
+
     if (session.getAttribute("key") == null) {
-        response.sendRedirect(request.getContextPath() + "/user/login.jsp?redirect=/feed/add.jsp");
+        response.sendRedirect(request.getContextPath() + "/user/login.jsp?redirect=/feed/add.jsp" + extraParam);
         return;
     }
+
+    request.setAttribute("extraParam", extraParam);
+    request.setAttribute("replyOf", maybeReply);
 %>
 <t:layout pageName="피드 추가">
     <jsp:attribute name="head">
@@ -12,7 +21,7 @@
             const sessionKey = localStorage.getItem("session");
             if (!sessionKey) {
                 alert("세션 오류로 다시 로그인해주세요.");
-                moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp");
+                moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp${extraParam}");
             }
 
             window.onload = () => {
@@ -32,7 +41,7 @@
                         error: (xhr, status, error) => {
                             // TODO: different error messages per error codes
                             alert("세션 오류로 다시 로그인해주세요.");
-                            moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp");
+                            moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp${extraParam}");
                         }
                     }
                 )
@@ -86,6 +95,10 @@
                         [...event.target.file.files].forEach(f => {
                             submitData.append("image", f);
                         });
+                    }
+                    const replyOf = "${replyOf}";
+                    if (replyOf.trim()) {
+                        submitData.append("replyOf", replyOf);
                     }
 
                     const upload = document.getElementById("upload");
@@ -217,7 +230,7 @@
         </h2>
         <div class="user-info-container mb-sm">
             <p class="user-info" id="user-info"></p>
-            <a class="user-info" href="${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp">본인이
+            <a class="user-info" href="${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp${extraParam}">본인이
                 아닌가요?</a>
         </div>
         <form>

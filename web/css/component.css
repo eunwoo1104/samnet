@@ -36,6 +36,7 @@ use on desktop
 
 .feed-context {
     font-weight: 450;
+    display: block;
 }
 
 .feed-image-container {
