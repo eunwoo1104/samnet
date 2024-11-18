@@ -6,7 +6,11 @@
 <%
     if (requireLogin != null && requireLogin.equals("true")) {
         if (session.getAttribute("key") == null) {
-            String tgtUrl = request.getServletPath() + "%3F" + request.getQueryString();
+            String query = request.getQueryString();
+            if (query == null) {
+                query = "";
+            }
+            String tgtUrl = request.getServletPath() + "%3F" + query;
             response.sendRedirect(request.getContextPath() + "/user/login.jsp?redirect=" + tgtUrl);
             return;
         }
