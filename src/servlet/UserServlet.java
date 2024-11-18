@@ -16,7 +16,10 @@ public class UserServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String keyFromSession = (String) request.getSession().getAttribute("key");
-        if (keyFromSession == null) {
+        String keyFromClient = request.getHeader("Authorization");
+        String targetUser = request.getParameter("user");
+        String currentUser = (String) request.getSession().getAttribute("id");
+        if (targetUser == null && keyFromSession == null) {
             ResponseFormat.sendJSONResponse(
                     response, 403, ResponseFormat.messageResponse(
                             403, ResponseFormat.NO_SESSION, "Login first"
@@ -24,9 +27,6 @@ public class UserServlet extends HttpServlet {
             );
             return;
         }
-
-        String keyFromClient = request.getHeader("Authorization");
-        String targetUser = request.getParameter("user");
         if (targetUser == null && (keyFromClient == null || !keyFromClient.equals(keyFromSession))) {
             ResponseFormat.sendJSONResponse(
                     response, 403, ResponseFormat.messageResponse(
@@ -42,13 +42,17 @@ public class UserServlet extends HttpServlet {
             if (targetUser != null) {
                 target = targetUser;
             } else {
-                target = (String) request.getSession().getAttribute("id");
+                target = currentUser;
             }
             UserObj user = userDAO.get(target);
+            JSONObject resp = user.toJSON();
+            if (currentUser != null && !currentUser.equals(target)) {
+                resp.put("follows", userDAO.getUserFollows(currentUser, targetUser));
+            }
 
             ResponseFormat.sendJSONResponse(
                     response, 200, ResponseFormat.response(
-                            200, ResponseFormat.OK, user.toJSON()
+                            200, ResponseFormat.OK, resp
                     )
             );
 

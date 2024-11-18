@@ -130,6 +130,8 @@ textarea {
     border-width: 1px;
     border-color: snow;
     color: snow;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .custom-button:hover:enabled {

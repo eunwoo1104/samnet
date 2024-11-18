@@ -39,7 +39,7 @@
                             moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp${extraParam}");
                         }
                     }
-                )
+                );
 
                 const fileInput = document.getElementById("file");
                 fileInput.addEventListener("change", event => {

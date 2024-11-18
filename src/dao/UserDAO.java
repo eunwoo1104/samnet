@@ -54,6 +54,26 @@ public class UserDAO {
         }
     }
 
+    public boolean idExists(String id) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT id FROM user WHERE id=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, id);
+
+            rs = stmt.executeQuery();
+            return rs.next();
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
     public UserObj get(String id) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
@@ -109,6 +129,27 @@ public class UserDAO {
             }
 
             return users;
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public boolean getUserFollows(String id, String target) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM follow WHERE user=? AND target=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, id);
+            stmt.setString(2, target);
+
+            rs = stmt.executeQuery();
+            return rs.next();
 
         } finally {
             if (rs != null) rs.close();

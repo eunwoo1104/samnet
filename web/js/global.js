@@ -20,6 +20,16 @@ function limitTextLength(text, maxSize) {
     return text.substring(0, maxSize-3) + "...";
 }
 
+function decodeUserFlag(flag) {
+    if (flag & (1 << 0)) {
+        return "admin";;
+    } else if (flag & (1 << 1)) {
+        return "verified";
+    } else if (flag & (1 << 2)) {
+        return "blocked";
+    }
+}
+
 async function encrypt(text) {
     const encoder = new TextEncoder();
     const pwEncode = encoder.encode(text);
