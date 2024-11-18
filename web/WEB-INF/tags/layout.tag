@@ -24,7 +24,9 @@
         SamNet
     </h1>
     <% if (session.getAttribute("key") == null) { %>
-    <span class="material-icons clickable" style="flex-basis: 0" onclick="moveto('${pageContext.request.contextPath}/user/login.jsp')">login</span>
+    <span class="material-icons clickable" style="flex-basis: 0" onclick="moveto(
+        '${pageContext.request.contextPath}/user/login.jsp?redirect=' + encodeURIComponent(window.location.href)
+            )">login</span>
     <% } else { %>
     <span class="material-icons clickable" style="flex-basis: 0">account_circle</span>
     <% } %>

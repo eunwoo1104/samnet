@@ -3,7 +3,12 @@
 <%
     request.setCharacterEncoding("UTF-8");
     String toRedirect = request.getParameter("redirect");
-    toRedirect = request.getContextPath() + (toRedirect != null ? toRedirect : "/index.jsp");
+    if (toRedirect == null) {
+        toRedirect = request.getContextPath() + "/index.jsp";
+    } else if (!toRedirect.startsWith("http")) {
+        toRedirect = request.getContextPath() + toRedirect;
+    }
+    // toRedirect = request.getContextPath() + (toRedirect != null ? toRedirect : "/index.jsp");
     request.setAttribute("redirect", toRedirect);
 %>
 <t:layout pageName="로그인">
