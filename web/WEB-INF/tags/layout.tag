@@ -1,7 +1,17 @@
 <%@tag description="Main Layout" language="java" pageEncoding="UTF-8" %>
 <%@attribute name="pageName" required="false" %>
 <%@attribute name="fillBlank" required="false" %>
+<%@attribute name="requireLogin" required="false" %>
 <%@attribute name="head" fragment="true" required="false" %>
+<%
+    if (requireLogin != null && requireLogin.equals("true")) {
+        if (session.getAttribute("key") == null) {
+            String tgtUrl = request.getServletPath() + "%3F" + request.getQueryString();
+            response.sendRedirect(request.getContextPath() + "/user/login.jsp?redirect=" + tgtUrl);
+            return;
+        }
+    }
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

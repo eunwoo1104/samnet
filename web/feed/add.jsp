@@ -7,15 +7,10 @@
         extraParam += "reply=" + maybeReply.trim();
     }
 
-    if (session.getAttribute("key") == null) {
-        response.sendRedirect(request.getContextPath() + "/user/login.jsp?redirect=/feed/add.jsp" + extraParam);
-        return;
-    }
-
     request.setAttribute("extraParam", extraParam);
     request.setAttribute("replyOf", maybeReply);
 %>
-<t:layout pageName="피드 추가">
+<t:layout pageName="피드 추가" requireLogin="true">
     <jsp:attribute name="head">
         <script>
             const sessionKey = localStorage.getItem("session");
