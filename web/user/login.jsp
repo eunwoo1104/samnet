@@ -9,11 +9,19 @@
         toRedirect = request.getContextPath() + toRedirect;
     }
     // toRedirect = request.getContextPath() + (toRedirect != null ? toRedirect : "/index.jsp");
+    String fromLogout = request.getParameter("logout");
+    String logout = fromLogout == null || !fromLogout.equals("true") ? "false" : fromLogout;
+
     request.setAttribute("redirect", toRedirect);
+    request.setAttribute("logout", logout);
 %>
 <t:layout pageName="로그인">
     <jsp:attribute name="head">
         <script>
+            const logout = ${logout};
+            if (logout) {
+                localStorage.clear();
+            }
             window.onload = () => {
                 const form = document.querySelector("form");
 
