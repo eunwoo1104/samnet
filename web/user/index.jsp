@@ -32,6 +32,7 @@
                     url: "${pageContext.request.contextPath}/api/user" + urlQuery,
                     type: "GET",
                     dataType: "json",
+                    async: false,
                     beforeSend: xhr => {
                         if (!targetId && sessionKey) {
                             xhr.setRequestHeader("Authorization", sessionKey);

@@ -66,6 +66,39 @@ public class FeedDAO {
         }
     }
 
+    public ArrayList<FeedObj> getFollowedList(String uid, int page) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM feed WHERE feed.user IN (SELECT target FROM follow WHERE follow.user=?) ORDER BY created_at DESC LIMIT 10 OFFSET ?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, uid);
+            stmt.setInt(2, 10 * (page > 0 ? page - 1 : 0));
+
+            rs = stmt.executeQuery();
+            ArrayList<FeedObj> feeds = new ArrayList<>();
+            while (rs.next()) {
+                feeds.add(new FeedObj(
+                        rs.getString("idx"),
+                        rs.getString("user"),
+                        rs.getString("content"),
+                        rs.getString("images"),
+                        rs.getString("reply_of"),
+                        rs.getString("created_at")
+                ));
+            }
+
+            return feeds;
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
     public boolean exists(String idx) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;

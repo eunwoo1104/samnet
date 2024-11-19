@@ -1,5 +1,6 @@
 package util;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,15 @@ public class ResponseFormat {
     }
 
     public static String response(int status, String code, JSONObject data) {
+        JSONObject obj = new JSONObject();
+        obj.put("status", status);
+        obj.put("code", code);
+        obj.put("data", data);
+
+        return obj.toJSONString();
+    }
+
+    public static String response(int status, String code, JSONArray data) {
         JSONObject obj = new JSONObject();
         obj.put("status", status);
         obj.put("code", code);

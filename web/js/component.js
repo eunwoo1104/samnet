@@ -1,4 +1,4 @@
-function feedComponent(author, content, images, baseURL, noBottomOutline=false) {
+function feedComponent(feedIdx, author, content, images, baseURL, replyOf=null, noBottomOutline=false, linkToView=false) {
     // i want to use typescript and react
     if (author.avatar === undefined || author.username === undefined || author.nickname === undefined) {
         const errorElement = document.createElement("p");
@@ -12,8 +12,12 @@ function feedComponent(author, content, images, baseURL, noBottomOutline=false) 
         container.style.borderBottomWidth = "0";
     }
 
+    const feedHeader = document.createElement("div");
+    feedHeader.className = "feed-header";
+
     const authorContainer = document.createElement("div");
     authorContainer.className = "feed-author-container clickable mb-sm";
+    authorContainer.onclick = e => moveto(baseURL + "/user?id=" + author.id);
 
     if (author.avatar) {
         const avatarImg = document.createElement("img");
@@ -34,7 +38,26 @@ function feedComponent(author, content, images, baseURL, noBottomOutline=false) 
     nickname.innerText = limitTextLength(escapeHTML(author.nickname).trim(), 20);
     authorContainer.appendChild(nickname);
 
-    container.appendChild(authorContainer);
+    feedHeader.appendChild(authorContainer);
+
+    const spacer = document.createElement("div");
+    spacer.style.flexGrow = "1";
+    feedHeader.appendChild(spacer);
+
+    if (linkToView) {
+        const viewButton = document.createElement("div");
+        viewButton.className = "clickable";
+        viewButton.addEventListener("click", e => {
+            moveto(baseURL + "/feed/view.jsp?id=" + feedIdx);
+        });
+        const viewIcon = document.createElement("span");
+        viewIcon.className = "material-icons";
+        viewIcon.textContent = "chevron_right";
+        viewButton.appendChild(viewIcon);
+        feedHeader.appendChild(viewButton);
+    }
+
+    container.appendChild(feedHeader);
 
     const context = document.createElement("p");
     context.className = "feed-context";

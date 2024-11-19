@@ -17,6 +17,13 @@ use on desktop
 }
 */
 
+.feed-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .feed-author-container {
     display: inline-flex;
     flex-direction: row;
