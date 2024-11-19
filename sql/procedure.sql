@@ -19,4 +19,19 @@ BEGIN
     SELECT COUNT(*) INTO hearts FROM heart WHERE feed=idx;
 END //
 
+CREATE PROCEDURE toggleFollow(
+    IN uid INT UNSIGNED, IN target_user INT UNSIGNED, OUT result BOOLEAN
+)
+BEGIN
+    DECLARE followed INT;
+    SELECT COUNT(*) INTO followed FROM follow WHERE user=uid AND target=target_user;
+    IF followed != 0 THEN
+        DELETE FROM follow WHERE user=uid AND target=target_user;
+        SET result = FALSE;
+    ELSE
+        INSERT INTO follow(user, target) VALUES (uid, target_user);
+        SET result = TRUE;
+    END IF;
+end //
+
 DELIMITER ;

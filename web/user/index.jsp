@@ -47,6 +47,56 @@
                 }
             );
 
+            const onFollow = e => {
+                const sessionKey = localStorage.getItem("session");
+                if (!sessionKey) {
+                    alert("로그인이 필요합니다.");
+                    return;
+                }
+
+                const requestData = {user: targetUser.id, follow: true};
+                $.ajax(
+                    {
+                        url: "${pageContext.request.contextPath}/api/user/action",
+                        type: "POST",
+                        dataType: "json",
+                        data: requestData,
+                        beforeSend: xhr => {
+                            xhr.setRequestHeader("Authorization", sessionKey);
+                        },
+                        success: data => {
+                            const res = data.data;
+
+                            const followButton = document.getElementById("follow-button");
+                            if (res.follow) {
+                                followButton.textContent = "팔로우 취소";
+                            } else {
+                                followButton.textContent = "팔로우";
+                            }
+                        },
+                        error: (xhr, status, error) => {
+                            // console.log(xhr);
+                            const data = xhr.responseJSON;
+                            let msg = "";
+                            switch (data.code) {
+                                case "NO_SESSION":
+                                case "INVALID_SESSION":
+                                    msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
+                                    break;
+                                case "USER_BLOCKED":
+                                    msg = "팔로우 권한이 없습니다.";
+                                    break;
+                                default:
+                                    msg = "알 수 없는 오류가 발생하였습니다.";
+                                    break;
+                            }
+                            // TODO: better handling
+                            alert(msg);
+                        }
+                    }
+                );
+            };
+
             window.onload = () => {
                 if (!targetUser) return;
                 const renderArea = document.getElementById("render-area");
@@ -114,12 +164,14 @@
 
                 const followButton = document.createElement("button");
                 followButton.className = "custom-button"
+                followButton.id = "follow-button"
                 if (targetUser.follows) {
                     followButton.textContent = "팔로우 취소"
                 } else {
                     followButton.textContent = "팔로우"
                 }
                 followButton.disabled = sameUser ? "true" : null;
+                followButton.addEventListener("click", onFollow);
                 buttonContainer.appendChild(followButton);
 
                 if (sameUser) {

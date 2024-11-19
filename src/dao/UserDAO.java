@@ -3,10 +3,7 @@ package dao;
 import util.ConnectionPool;
 
 import javax.naming.NamingException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class UserDAO {
@@ -236,6 +233,26 @@ public class UserDAO {
 
         } finally {
             if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public boolean follow(String uid, String target) throws NamingException, SQLException {
+        Connection conn = ConnectionPool.get();
+        CallableStatement stmt = null;
+        try {
+            String sql = "CALL toggleFollow(?, ?, ?)";
+            stmt = conn.prepareCall(sql);
+
+            stmt.setString(1, uid);
+            stmt.setString(2, target);
+            stmt.registerOutParameter(3, Types.BOOLEAN);
+
+            stmt.execute();
+            return stmt.getBoolean(3);
+
+        } finally {
             if (stmt != null) stmt.close();
             if (conn != null) conn.close();
         }

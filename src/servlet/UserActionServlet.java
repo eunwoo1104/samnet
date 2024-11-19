@@ -1,5 +1,5 @@
 package servlet;
-import dao.FeedDAO;
+
 import dao.UserDAO;
 import dao.UserObj;
 import org.json.simple.JSONObject;
@@ -10,8 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/api/feed/action")
-public class FeedActionServlet extends HttpServlet {
+@WebServlet("/api/user/action")
+public class UserActionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -66,11 +66,10 @@ public class FeedActionServlet extends HttpServlet {
             return;
         }
 
-        // actions to perform related to feed
-        String targetFeed = request.getParameter("feed");
-        String paramHeart = request.getParameter("heart");
+        String targetUser = request.getParameter("user");
+        String paramFollow = request.getParameter("follow");
 
-        if (targetFeed == null || paramHeart == null) {
+        if (targetUser == null || paramFollow == null) {
             ResponseFormat.sendJSONResponse(
                     response, 400, ResponseFormat.messageResponse(
                             400, ResponseFormat.INVALID_DATA, "Missing required data"
@@ -79,24 +78,22 @@ public class FeedActionServlet extends HttpServlet {
             return;
         }
 
-        boolean toggleHeart = paramHeart.trim().equals("true");
-
+        boolean toggleFollow = paramFollow.trim().equals("true");
         try {
-            FeedDAO feedDAO = new FeedDAO();
-            if (!feedDAO.exists(targetFeed)) {
+            UserDAO userDAO = new UserDAO();
+            if (!userDAO.idExists(targetUser)) {
                 ResponseFormat.sendJSONResponse(
                         response, 404, ResponseFormat.messageResponse(
-                                404, ResponseFormat.MISSING_DATA, "Feed not found"
+                                404, ResponseFormat.MISSING_DATA, "User not found"
                         )
                 );
                 return;
             }
-
             JSONObject res = new JSONObject();
-            if (toggleHeart) {
-                int[] heartResult = feedDAO.toggleHeart(targetFeed, user.getId());
-                res.put("heart", heartResult[0]);
-                res.put("heartCount", heartResult[1]);
+
+            if (toggleFollow) {
+                boolean followResult = userDAO.follow(user.getId(), targetUser);
+                res.put("follow", followResult);
             }
 
             ResponseFormat.sendJSONResponse(
