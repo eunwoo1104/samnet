@@ -77,6 +77,10 @@ header, footer, .content {
     padding: 0 1.75rem;
 }
 
+.content-margin {
+    margin-right: 1.75rem;
+}
+
 h2 {
     display: block;
     text-align: center;

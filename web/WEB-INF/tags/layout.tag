@@ -52,13 +52,14 @@
     </script>
     <style>
         .main-menu {
+            position: fixed;
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            gap: 0.3rem;
+            gap: 0.5rem;
             background-color: #23272A;
             margin-top: 0.5rem;
-            padding: 0.5rem;
+            padding: 1rem;
             border-radius: 0.5rem;
         }
 
@@ -68,6 +69,7 @@
 
         .main-menu#account-menu{
             align-items: end;
+            right: 0;
         }
 
         .main-menu > div > a {
@@ -105,7 +107,7 @@
             </a>
         </div>
     </div>
-    <div class="main-menu" id="account-menu" style="display: none">
+    <div class="main-menu content-margin" id="account-menu" style="display: none">
         <div>
             <a href="${pageContext.request.contextPath}/user">
                 내 정보
