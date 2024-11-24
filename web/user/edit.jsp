@@ -211,7 +211,7 @@
         <p class="mt-mid" style="font-weight: 300; font-size: 0.8rem; margin-bottom: 0.3rem">
             계정 탈퇴는 아래 버튼을 눌러 하실 수 있습니다.
         </p>
-        <button class="custom-button" style="color: lightcoral; border-color: lightcoral" onclick="alert('tba')">
+        <button class="custom-button" style="color: lightcoral; border-color: lightcoral" onclick="moveto('delete.jsp')">
             계정탈퇴
         </button>
     </jsp:body>
