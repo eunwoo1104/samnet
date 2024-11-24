@@ -1,12 +1,14 @@
 function feedComponent(
-    feedIdx, author, content, images, baseURL, createdAt, editedAt, replyOf=null, noBottomOutline=false, linkToView=false
+    feed, author, baseURL, noBottomOutline=false, linkToView=false
 ) {
     // i want to use typescript and react
+    /*
     if (author.avatar === undefined || author.username === undefined || author.nickname === undefined) {
         const errorElement = document.createElement("p");
         errorElement.innerText = "컨텐츠 생성에 문제가 발생했습니다.";
         return errorElement;
     }
+    */
 
     const container = document.createElement("div");
     container.className = "feed-container";
@@ -48,7 +50,7 @@ function feedComponent(
         const viewButton = document.createElement("div");
         viewButton.className = "clickable";
         viewButton.addEventListener("click", e => {
-            moveto(baseURL + "/feed/view.jsp?id=" + feedIdx);
+            moveto(baseURL + "/feed/view.jsp?id=" + feed.idx);
         });
         const viewIcon = document.createElement("span");
         viewIcon.className = "material-icons";
@@ -61,13 +63,13 @@ function feedComponent(
 
     const context = document.createElement("p");
     context.className = "feed-context";
-    context.innerText = escapeHTML(content);
+    context.innerText = escapeHTML(feed.content);
     container.appendChild(context);
 
     const imageContainer = document.createElement("div");
     imageContainer.className = "feed-image-container mt-xs";
     let imgIncluded = false;
-    images.trim().split(",").forEach(img => {
+    feed.images.trim().split(",").forEach(img => {
         if (!img) return;
         const imgURL = `${baseURL}/resource/image?id=` + img;
         const imgChild = document.createElement("img");
@@ -85,8 +87,8 @@ function feedComponent(
 
     const feedTime = document.createElement("p");
     feedTime.className = "mt-xs feed-time";
-    feedTime.innerText = createdAt;
-    if (editedAt) {
+    feedTime.innerText = feed.createdAt;
+    if (feed.editedAt) {
         feedTime.innerText += " (수정됨)";
     }
 
@@ -108,4 +110,37 @@ function avatarImage(src, alt, containerId) {
 
     imgContainer.appendChild(imgElement);
     return imgContainer
+}
+
+function profileComponent(user, baseURL) {
+    const profileContainer = document.createElement("div");
+    profileContainer.className = "profile-container";
+
+    if (user.avatar) {
+        const imgSrc = `${baseURL}/resource/image?id=` + user.avatar;
+        const avatarImg = avatarImage(imgSrc, user.username, "pf-avatar");
+        profileContainer.appendChild(avatarImg);
+    } else {
+        const defaultAvatar = document.createElement("span");
+        defaultAvatar.className = "material-icons";
+        defaultAvatar.id = "pf-avatar";
+        defaultAvatar.innerText = "account_circle";
+        profileContainer.appendChild(defaultAvatar);
+    }
+
+    const nameContainer = document.createElement("div");
+    nameContainer.className = "name-container";
+
+    const nickname = document.createElement("h3")
+    nickname.textContent = escapeHTML(user.nickname);
+    nameContainer.appendChild(nickname);
+
+    const username = document.createElement("p");
+    username.className = "pf-username"
+    username.textContent = "@" + escapeHTML(user.username);
+    nameContainer.appendChild(username);
+
+    profileContainer.appendChild(nameContainer);
+
+    return profileContainer;
 }

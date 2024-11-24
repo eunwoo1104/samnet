@@ -82,3 +82,47 @@ use on desktop
     height: 100%;
     width: auto;
 }
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#pf-avatar {
+    height: 4.5rem;
+    font-size: 4.5rem;
+}
+
+.name-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.name-container > h3 {
+    display: block;
+    font-size: 1.5rem;
+}
+
+.pf-username {
+    opacity: 80%;
+}
+
+@media (min-width: 300px) {
+    .profile-container {
+        flex-direction: row;
+        justify-content: start;
+    }
+
+    .name-container {
+        align-items: start;
+        margin-left: 0.3rem;
+    }
+}

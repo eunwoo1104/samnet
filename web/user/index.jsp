@@ -102,35 +102,7 @@
                 if (!targetUser) return;
                 const renderArea = document.getElementById("render-area");
 
-                // avatar, names
-                const profileContainer = document.createElement("div");
-                profileContainer.className = "profile-container";
-
-                if (targetUser.avatar) {
-                    const imgSrc = "${pageContext.request.contextPath}/resource/image?id=" + targetUser.avatar;
-                    const avatarImg = avatarImage(imgSrc, targetUser.username, "pf-avatar");
-                    profileContainer.appendChild(avatarImg);
-                } else {
-                    const defaultAvatar = document.createElement("span");
-                    defaultAvatar.className = "material-icons";
-                    defaultAvatar.id = "pf-avatar";
-                    defaultAvatar.innerText = "account_circle";
-                    profileContainer.appendChild(defaultAvatar);
-                }
-
-                const nameContainer = document.createElement("div");
-                nameContainer.className = "name-container";
-
-                const nickname = document.createElement("h3")
-                nickname.textContent = escapeHTML(targetUser.nickname);
-                nameContainer.appendChild(nickname);
-
-                const username = document.createElement("p");
-                username.className = "pf-username"
-                username.textContent = "@" + escapeHTML(targetUser.username);
-                nameContainer.appendChild(username);
-
-                profileContainer.appendChild(nameContainer);
+                const profileContainer = profileComponent(targetUser, "${pageContext.request.contextPath}");
                 renderArea.appendChild(profileContainer)
 
                 // badges
@@ -203,38 +175,6 @@
             }
         </script>
         <style>
-            .profile-container {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-            }
-
-            #pf-avatar {
-                height: 4.5rem;
-                font-size: 4.5rem;
-            }
-
-            .name-container {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                text-overflow: ellipsis;
-                overflow: hidden;
-            }
-
-            .name-container > h3 {
-                display: block;
-                font-size: 1.5rem;
-            }
-            
-            .pf-username {
-                opacity: 80%;
-            }
-
             .badge-container {
                 display: flex;
                 flex-direction: row;
@@ -251,16 +191,6 @@
             }
 
             @media (min-width: 300px) {
-                .profile-container {
-                    flex-direction: row;
-                    justify-content: start;
-                }
-
-                .name-container {
-                    align-items: start;
-                    margin-left: 0.3rem;
-                }
-
                 .badge-container {
                     justify-content: start;
                 }
