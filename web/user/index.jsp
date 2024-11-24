@@ -107,15 +107,13 @@
                 profileContainer.className = "profile-container";
 
                 if (targetUser.avatar) {
-                    const avatarImg = document.createElement("img");
-                    avatarImg.className = "pf-avatar";
-                    avatarImg.src = author.avatar;
-                    avatarImg.alt = author.username;
-                    // TODO: avatar image style
+                    const imgSrc = "${pageContext.request.contextPath}/resource/image?id=" + targetUser.avatar;
+                    const avatarImg = avatarImage(imgSrc, targetUser.username, "pf-avatar");
                     profileContainer.appendChild(avatarImg);
                 } else {
                     const defaultAvatar = document.createElement("span");
-                    defaultAvatar.className = "material-icons pf-avatar";
+                    defaultAvatar.className = "material-icons";
+                    defaultAvatar.id = "pf-avatar";
                     defaultAvatar.innerText = "account_circle";
                     profileContainer.appendChild(defaultAvatar);
                 }
@@ -179,6 +177,9 @@
                     const editButton = document.createElement("button");
                     editButton.className = "custom-button mt-sm"
                     editButton.textContent = "프로필 수정"
+                    editButton.addEventListener("click", () => {
+                        moveto("${pageContext.request.contextPath}/user/edit.jsp");
+                    });
                     buttonContainer.appendChild(editButton);
                 }
 
@@ -202,7 +203,7 @@
                 text-align: center;
             }
 
-            .pf-avatar {
+            #pf-avatar {
                 height: 4.5rem;
                 font-size: 4.5rem;
             }

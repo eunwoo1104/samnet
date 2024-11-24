@@ -13,7 +13,7 @@ body {
     word-break: keep-all;
 }
 
-button, input {
+button, input, textarea {
     font-family: inherit;
 }
 
@@ -42,6 +42,11 @@ input, button {
 
 input[type="file"] {
     display: none;
+}
+
+textarea {
+    height: 10rem;
+    resize: none;
 }
 
 /* Template Area */
@@ -151,6 +156,32 @@ textarea {
     opacity: 50%;
 }
 
+.file-upload-label {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    background-color: #1b1e23;
+    border-radius: 0.25rem;
+    outline: none;
+    border-width: 2px;
+    border-style: dashed;
+    border-color: dimgrey;
+    color: snow;
+    caret-color: snow;
+    text-align: center;
+    font-weight: 300;
+    font-size: 0.8rem;
+}
+
+.file-upload-label:hover {
+    opacity: 75%;
+    cursor: pointer;
+}
+
+.file-upload-label:focus-visible {
+    opacity: 75%;
+}
+
 /* Macro Area */
 .default-hide {
     display: none;
@@ -250,3 +281,10 @@ textarea {
     font-weight: 600;
 }
 
+.round-img {
+    border-radius: 50%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0.3rem;
+}

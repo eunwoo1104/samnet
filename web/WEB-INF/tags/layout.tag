@@ -61,6 +61,7 @@
             margin-top: 0.5rem;
             padding: 1rem;
             border-radius: 0.5rem;
+            z-index: 10;
         }
 
         .main-menu#main-menu {

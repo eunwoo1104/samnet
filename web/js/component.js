@@ -20,10 +20,8 @@ function feedComponent(feedIdx, author, content, images, baseURL, replyOf=null, 
     authorContainer.onclick = e => moveto(baseURL + "/user?id=" + author.id);
 
     if (author.avatar) {
-        const avatarImg = document.createElement("img");
-        avatarImg.src = author.avatar;
-        avatarImg.alt = author.username;
-        // TODO: avatar image style
+        const avatarSrc = `${baseURL}/resource/image?id=` + author.avatar;
+        const avatarImg = avatarImage(avatarSrc, author.username, "feed-author-avatar");
         authorContainer.appendChild(avatarImg);
     } else {
         const defaultAvatar = document.createElement("span");
@@ -84,4 +82,18 @@ function feedComponent(feedIdx, author, content, images, baseURL, replyOf=null, 
     container.appendChild(imageContainer);
 
     return container;
+}
+
+function avatarImage(src, alt, containerId) {
+    const imgContainer = document.createElement("div");
+    imgContainer.className = "avatar-image-container";
+    imgContainer.id = containerId;
+
+    const imgElement = document.createElement("img");
+    imgElement.className = "avatar-image";
+    imgElement.src = src;
+    imgElement.alt = alt;
+
+    imgContainer.appendChild(imgElement);
+    return imgContainer
 }

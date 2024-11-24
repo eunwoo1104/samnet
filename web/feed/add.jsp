@@ -152,36 +152,6 @@
             }
         </script>
         <style>
-            textarea {
-                height: 10rem;
-                resize: none;
-            }
-
-            .upload-label {
-                width: 100%;
-                box-sizing: border-box;
-                padding: 0.5rem;
-                background-color: #1b1e23;
-                border-radius: 0.25rem;
-                outline: none;
-                border-width: 2px;
-                border-style: dashed;
-                border-color: dimgrey;
-                color: snow;
-                caret-color: snow;
-                text-align: center;
-                font-weight: 300;
-                font-size: 0.8rem;
-            }
-
-            .upload-label:hover {
-                opacity: 75%;
-                cursor: pointer;
-            }
-
-            .upload-label:focus-visible {
-                opacity: 75%;
-            }
 
             .file-names {
                 font-weight: 300;
@@ -234,7 +204,7 @@
                 <textarea name="content" maxlength="4096"></textarea>
             </label>
             <label>첨부할 이미지를 선택해주세요.</label>
-            <label class="upload-label mb-mid" id="file-container">
+            <label class="file-upload-label mb-mid" id="file-container">
                 <span id="file-label">여기서 이미지 첨부...</span>
                 <input name="file" id="file" type="file" accept="image/*" multiple>
             </label>

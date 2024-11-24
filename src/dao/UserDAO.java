@@ -176,18 +176,19 @@ public class UserDAO {
         }
     }
 
-    public boolean update(String id, String email, String username, String nickname, String bio) throws NamingException, SQLException {
+    public boolean update(String id, String email, String username, String nickname, String bio, String avatar) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         try {
-            String sql = "UPDATE user SET email=?, username=?, nickname=?, bio=? WHERE id=?";
+            String sql = "UPDATE user SET email=?, username=?, nickname=?, bio=?, avatar=? WHERE id=?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, email);
             stmt.setString(2, username);
             stmt.setString(3, nickname);
             stmt.setString(4, bio);
-            stmt.setString(5, id);
+            stmt.setString(5, avatar);
+            stmt.setString(6, id);
 
             int count = stmt.executeUpdate();
             return count == 1;
