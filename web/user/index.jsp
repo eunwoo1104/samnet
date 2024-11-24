@@ -173,6 +173,14 @@
                 followButton.addEventListener("click", onFollow);
                 buttonContainer.appendChild(followButton);
 
+                const feedListButton = document.createElement("button");
+                feedListButton.className = "custom-button mt-sm"
+                feedListButton.textContent = "피드 목록"
+                feedListButton.addEventListener("click", () => {
+                    moveto("${pageContext.request.contextPath}/feed?user=" + targetUser.id);
+                });
+                buttonContainer.appendChild(feedListButton);
+
                 if (sameUser) {
                     const editButton = document.createElement("button");
                     editButton.className = "custom-button mt-sm"

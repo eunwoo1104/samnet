@@ -47,10 +47,16 @@ public class FeedListServlet extends HttpServlet {
         JSONArray feedArr = new JSONArray();
         HashMap<String, UserObj> userCache = new HashMap<>();
         String pageParam = request.getParameter("page");
+        String targetUser = request.getParameter("user");
         int page = Integer.parseInt(pageParam == null ? "1" : pageParam);
 
         try {
-            List<FeedObj> feeds = feedDAO.getFollowedList(userId, page);
+            List<FeedObj> feeds;
+            if (targetUser != null) {
+                feeds = feedDAO.getList(targetUser);
+            } else {
+                feeds = feedDAO.getFollowedList(userId, page);
+            }
             for (FeedObj feed : feeds) {
                 JSONObject feedObj = feed.toJSON();
                 String author = feed.getUser();

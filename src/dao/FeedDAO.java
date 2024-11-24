@@ -36,13 +36,15 @@ public class FeedDAO {
         }
     }
 
-    public ArrayList<FeedObj> getList() throws SQLException, NamingException {
+    public ArrayList<FeedObj> getList(String uid) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM feed";
+            String sql = "SELECT * FROM feed WHERE user=?";
             stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, uid);
 
             rs = stmt.executeQuery();
             ArrayList<FeedObj> feeds = new ArrayList<>();

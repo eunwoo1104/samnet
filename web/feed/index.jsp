@@ -1,13 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%
+    request.setCharacterEncoding("UTF-8");
+    String targetUser = request.getParameter("user");
+    request.setAttribute("targetUser", targetUser == null ? "null" : "\"" + targetUser + "\"");
+%>
 <t:layout pageName="피드 목록" requireLogin="true">
     <jsp:attribute name="head">
         <script>
+            const targetUser = ${targetUser};
+
             function getFeeds(page=1, runAsync=true) {
                 let feedList = null;
                 let urlQuery = "?";
                 if (page > 0) {
                     urlQuery += "page=" + page;
+                }
+                if (targetUser) {
+                    urlQuery += "&user=" + targetUser;
                 }
                 $.ajax(
                     {
@@ -38,10 +48,12 @@
                     const noFeed = document.createElement("h2");
                     noFeed.textContent = "볼 수 있는 피드가 없어요.";
                     feedListArea.appendChild(noFeed);
-                    const followMsg = document.createElement("p");
-                    followMsg.textContent = "새로운 친구를 팔로우해서 피드를 확인하세요.";
-                    followMsg.style.textAlign = "center";
-                    feedListArea.appendChild(followMsg);
+                    if (!targetUser) {
+                        const followMsg = document.createElement("p");
+                        followMsg.textContent = "새로운 친구를 팔로우해서 피드를 확인하세요.";
+                        followMsg.style.textAlign = "center";
+                        feedListArea.appendChild(followMsg);
+                    }
                     return;
                 }
                 const title = document.createElement("h2");
