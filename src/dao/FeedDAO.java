@@ -26,7 +26,8 @@ public class FeedDAO {
                     rs.getString("content"),
                     rs.getString("images"),
                     rs.getString("reply_of"),
-                    rs.getString("created_at")
+                    rs.getString("created_at"),
+                    rs.getString("edited_at")
             );
 
         } finally {
@@ -36,15 +37,16 @@ public class FeedDAO {
         }
     }
 
-    public ArrayList<FeedObj> getList(String uid) throws SQLException, NamingException {
+    public ArrayList<FeedObj> getList(String uid, int page) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM feed WHERE user=?";
+            String sql = "SELECT * FROM feed WHERE user=? ORDER BY created_at DESC LIMIT 10 OFFSET ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, uid);
+            stmt.setInt(2, 10 * (page > 0 ? page - 1 : 0));
 
             rs = stmt.executeQuery();
             ArrayList<FeedObj> feeds = new ArrayList<>();
@@ -55,7 +57,8 @@ public class FeedDAO {
                         rs.getString("content"),
                         rs.getString("images"),
                         rs.getString("reply_of"),
-                        rs.getString("created_at")
+                        rs.getString("created_at"),
+                        rs.getString("edited_at")
                 ));
             }
 
@@ -88,7 +91,8 @@ public class FeedDAO {
                         rs.getString("content"),
                         rs.getString("images"),
                         rs.getString("reply_of"),
-                        rs.getString("created_at")
+                        rs.getString("created_at"),
+                        rs.getString("edited_at")
                 ));
             }
 

@@ -49,7 +49,7 @@
             window.onload = () => {
                 const mainFeedArea = document.getElementById("main-feed");
                 mainFeedArea.appendChild(
-                    feedComponent(feed.idx, author, feed.content, feed.images, "${pageContext.request.contextPath}")
+                    feedComponent(feed.idx, author, feed.content, feed.images, "${pageContext.request.contextPath}", feed.createdAt, feed.editedAt)
                 );
 
                 const likeButton = document.getElementById("like");

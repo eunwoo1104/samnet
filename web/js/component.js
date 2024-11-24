@@ -1,4 +1,6 @@
-function feedComponent(feedIdx, author, content, images, baseURL, replyOf=null, noBottomOutline=false, linkToView=false) {
+function feedComponent(
+    feedIdx, author, content, images, baseURL, createdAt, editedAt, replyOf=null, noBottomOutline=false, linkToView=false
+) {
     // i want to use typescript and react
     if (author.avatar === undefined || author.username === undefined || author.nickname === undefined) {
         const errorElement = document.createElement("p");
@@ -80,6 +82,16 @@ function feedComponent(feedIdx, author, content, images, baseURL, replyOf=null, 
     }
 
     container.appendChild(imageContainer);
+
+    const feedTime = document.createElement("p");
+    feedTime.className = "mt-xs feed-time";
+    feedTime.innerText = createdAt;
+    if (editedAt) {
+        feedTime.innerText += " (수정됨)";
+    }
+
+    container.appendChild(feedTime);
+
 
     return container;
 }

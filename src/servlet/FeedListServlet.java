@@ -53,7 +53,7 @@ public class FeedListServlet extends HttpServlet {
         try {
             List<FeedObj> feeds;
             if (targetUser != null) {
-                feeds = feedDAO.getList(targetUser);
+                feeds = feedDAO.getList(targetUser, page);
             } else {
                 feeds = feedDAO.getFollowedList(userId, page);
             }

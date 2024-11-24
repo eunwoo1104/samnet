@@ -1,5 +1,6 @@
 USE samnet;
 DROP PROCEDURE IF EXISTS toggleHeart;
+DROP PROCEDURE IF EXISTS toggleFollow;
 
 DELIMITER //
 

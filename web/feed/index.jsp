@@ -66,6 +66,8 @@
                         feed.content,
                         feed.images,
                         "${pageContext.request.contextPath}",
+                        feed.createdAt,
+                        feed.editedAt,
                         null,
                         index+1 !== feedList.length,
                         true
