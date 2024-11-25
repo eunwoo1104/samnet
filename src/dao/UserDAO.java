@@ -160,6 +160,37 @@ public class UserDAO {
         }
     }
 
+    public UserObj getAuthor(String feedId) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM user WHERE id=(SELECT user FROM feed WHERE idx=?)";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, feedId);
+
+            rs = stmt.executeQuery();
+            if (!rs.next()) return null;
+
+            return new UserObj(
+                    rs.getString("id"),
+                    rs.getString("email"),
+                    rs.getString("nickname"),
+                    rs.getString("username"),
+                    rs.getString("bio"),
+                    rs.getString("avatar"),
+                    rs.getString("created_at"),
+                    rs.getInt("flag")
+            );
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
     public boolean insert(String email, String password, String nickname, String username) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;

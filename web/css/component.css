@@ -17,6 +17,18 @@ use on desktop
 }
 */
 
+.feed-reply-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    opacity: 75%;
+}
+
+.feed-reply-container > span, p {
+    font-size: 0.8rem;
+}
+
 .feed-header {
     display: flex;
     flex-direction: row;
@@ -67,6 +79,7 @@ use on desktop
 }
 
 .feed-time {
+    display: block;
     opacity: 80%;
     font-size: 0.8rem;
 }

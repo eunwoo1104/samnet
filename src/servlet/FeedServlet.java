@@ -43,9 +43,15 @@ public class FeedServlet extends HttpServlet {
                 return;
             }
 
+            JSONObject feedJson = feed.toJSON();
+            if (feed.getReplyOf() != null) {
+                UserDAO userDAO = new UserDAO();
+                UserObj replyAuthor = userDAO.getAuthor(feed.getReplyOf());
+                feedJson.put("replyAuthor", replyAuthor.toJSON());
+            }
             ResponseFormat.sendJSONResponse(
                     response, 200, ResponseFormat.response(
-                            200, ResponseFormat.OK, feed.toJSON()
+                            200, ResponseFormat.OK, feedJson
                     )
             );
 

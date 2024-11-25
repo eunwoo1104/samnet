@@ -3,11 +3,13 @@
 <%@ page import="dao.UserDAO" %>
 <%@ page import="dao.UserObj" %>
 <%@ page import="util.Utils" %>
+<%@ page import="org.json.simple.JSONObject" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%
     request.setCharacterEncoding("UTF-8");
     String feedId = request.getParameter("id");
+    String fwdFrom = request.getParameter("fwd");
     if (feedId == null) {
         pageContext.forward("/404.jsp?type=feed");
         return;
@@ -28,13 +30,20 @@
     if (currentUser != null && !currentUser.isBlank()) {
         voted = userDAO.likedToFeed(currentUser, feedId);
     }
+    JSONObject feedData = feed.toJSON();
+    UserObj replyAuthor = null;
+    if (feed.getReplyOf() != null) {
+        replyAuthor = userDAO.getAuthor(feed.getReplyOf());
+        feedData.put("replyAuthor", replyAuthor.toJSON());
+    }
 
-    request.setAttribute("feed", Utils.doubleSlash(feed.toJSON().toJSONString()));
+    request.setAttribute("feed", Utils.doubleSlash(feedData.toJSONString()));
     request.setAttribute("feedId", feedId);
     request.setAttribute("initHeartCount", initHeartCount);
     request.setAttribute("initHeartStyle", voted ? "color: red" : "");
     request.setAttribute("initHeartIcon", voted ? "favorite" : "favorite_border");
     request.setAttribute("author", Utils.doubleSlash(author.toJSON().toJSONString()));
+    request.setAttribute("fwdFrom" , fwdFrom == null ? "null" : "\"" + fwdFrom + "\"");
 %>
 <t:layout pageName="피드 보기">
     <jsp:attribute name="head">
@@ -45,12 +54,22 @@
             // TODO: consider safer method
             const feed = JSON.parse('${feed}');
             const author = JSON.parse('${author}');
+            const fwdFrom = ${fwdFrom};
 
             window.onload = () => {
                 const mainFeedArea = document.getElementById("main-feed");
                 mainFeedArea.appendChild(
                     feedComponent(feed, author, "${pageContext.request.contextPath}")
                 );
+
+                if (fwdFrom) {
+                    const fwdButton = document.getElementById("fwdButton");
+                    fwdButton.style.display = "block";
+                    fwdButton.addEventListener(
+                        "click",
+                        () => moveto("${pageContext.request.contextPath}/feed/view.jsp?id=" + fwdFrom)
+                    );
+                }
 
                 const likeButton = document.getElementById("like");
                 likeButton.addEventListener("click", e => {
@@ -136,6 +155,10 @@
                 <span class="material-icons">reply</span>
                 <p>답장하기</p>
             </button>
+        </div>
+        <div class="clickable feed-reply-container mt-sm" style="display: none" id="fwdButton">
+            <span class="material-icons">redo</span>
+            <p>답장 피드로 돌아가기</p>
         </div>
     </jsp:body>
 </t:layout>

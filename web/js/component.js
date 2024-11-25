@@ -16,6 +16,24 @@ function feedComponent(
         container.style.borderBottomWidth = "0";
     }
 
+    if (feed.replyOf && feed.replyAuthor) {
+        const replyContainer = document.createElement("div");
+        replyContainer.className = "feed-reply-container mb-sm clickable"
+        const replyIcon = document.createElement("span");
+        replyIcon.className = "material-icons";
+        replyIcon.textContent = "reply";
+        replyContainer.appendChild(replyIcon);
+        const replyText = document.createElement("p");
+        const replyAuthorName = feed.replyAuthor.username;
+        replyText.textContent = "@" + escapeHTML(replyAuthorName) +"님의 피드 답장";
+        replyContainer.appendChild(replyText);
+        replyContainer.addEventListener(
+            "click",
+            () => moveto(baseURL + "/feed/view.jsp?id=" + feed.replyOf + "&fwd=" + feed.idx)
+        );
+        container.appendChild(replyContainer);
+    }
+
     const feedHeader = document.createElement("div");
     feedHeader.className = "feed-header";
 
@@ -93,7 +111,6 @@ function feedComponent(
     }
 
     container.appendChild(feedTime);
-
 
     return container;
 }

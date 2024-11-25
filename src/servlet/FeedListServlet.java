@@ -65,6 +65,7 @@ public class FeedListServlet extends HttpServlet {
                     userCache.put(author, userObj);
                 }
                 feedObj.put("author", userCache.get(author).toJSON());
+                // todo: add replyAuthor field
                 feedArr.add(feedObj);
             }
 
