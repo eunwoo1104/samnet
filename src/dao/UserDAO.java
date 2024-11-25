@@ -3,6 +3,7 @@ package dao;
 import util.ConnectionPool;
 
 import javax.naming.NamingException;
+import java.io.Console;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -102,13 +103,17 @@ public class UserDAO {
         }
     }
 
-    public ArrayList<UserObj> getList() throws SQLException, NamingException {
+    public ArrayList<UserObj> getList(String query, int page) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM user";
+            String sql = "SELECT *, MATCH(email, nickname, username, bio) AGAINST(? in boolean mode) as relevance FROM user WHERE MATCH(email, nickname, username, bio) AGAINST(? in boolean mode) ORDER BY relevance DESC LIMIT 10 OFFSET ?";
             stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, query);
+            stmt.setString(2, query);
+            stmt.setInt(3, 10 * (page > 0 ? page - 1 : 0));
 
             rs = stmt.executeQuery();
             ArrayList<UserObj> users = new ArrayList<>();

@@ -112,9 +112,20 @@ function avatarImage(src, alt, containerId) {
     return imgContainer
 }
 
-function profileComponent(user, baseURL) {
+function profileComponent(user, baseURL, outline=false, noBottomOutline=false) {
     const profileContainer = document.createElement("div");
     profileContainer.className = "profile-container";
+    if (outline) {
+        profileContainer.style.outline = "none";
+        profileContainer.style.borderStyle = "solid";
+        profileContainer.style.borderWidth = "1px 0";
+        profileContainer.style.borderColor = "dimgrey";
+        profileContainer.style.padding = "0.4rem 0"
+    }
+
+    if (noBottomOutline) {
+        profileContainer.style.borderBottomWidth = "0";
+    }
 
     if (user.avatar) {
         const imgSrc = `${baseURL}/resource/image?id=` + user.avatar;
