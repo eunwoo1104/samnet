@@ -250,20 +250,27 @@ textarea {
     margin-bottom: 2rem;
 }
 
-.ok-box {
+.ok-box, .error-box, .info-box {
     border-radius: 0.25rem;
     outline: none;
     border-width: 1px;
+    padding: 1.25rem;
+    font-weight: 600;
+}
+
+.ok-box {
     background-color: springgreen;
     color: darkgreen;
 }
 
 .error-box {
-    border-radius: 0.25rem;
-    outline: none;
-    border-width: 1px;
     background-color: lightcoral;
     color: darkred;
+}
+
+.info-box {
+    background-color: cornflowerblue;
+    color: darkblue;
 }
 
 .clickable {}

@@ -23,7 +23,7 @@
 
             window.onload = () => {
                 const form = document.querySelector("form");
-                const msg = document.getElementById("start-search");
+                const msg = document.getElementById("submit-message");
 
                 form.addEventListener("submit", event => {
                     event.preventDefault();
@@ -71,9 +71,9 @@
             </label>
             <input class="custom-button mb-mid" type="submit" value="검색" id="submit-input">
         </form>
-        <p id="start-search">
-            유저 목록을 확인하려면 검색어를 입력해주세요.
-        </p>
+        <div class="info-box" id="submit-message">
+            <p>유저 목록을 확인하려면 검색어를 입력해주세요.</p>
+        </div>
         <div id="user-list"></div>
     </jsp:body>
 </t:layout>

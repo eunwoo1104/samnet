@@ -107,6 +107,11 @@
                 피드 작성
             </a>
         </div>
+        <div>
+            <a href="${pageContext.request.contextPath}/user/list.jsp">
+                유저 검색
+            </a>
+        </div>
     </div>
     <div class="main-menu content-margin" id="account-menu" style="display: none">
         <div>

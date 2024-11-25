@@ -58,9 +58,7 @@
         </script>
         <style>
             #submit-message {
-                padding: 1.25rem;
                 margin-top: 1.25rem;
-                font-weight: 700;
             }
         </style>
     </jsp:attribute>

@@ -25,7 +25,7 @@ use on desktop
     opacity: 75%;
 }
 
-.feed-reply-container > span, p {
+.feed-reply-container > span p {
     font-size: 0.8rem;
 }
 
