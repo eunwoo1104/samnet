@@ -5,12 +5,15 @@
     String maybeReply = request.getParameter("reply");
     if (maybeReply != null && !maybeReply.isBlank()) {
         extraParam += "reply=" + maybeReply.trim();
+        request.setAttribute("feedAddTitle", "피드 답장");
+    } else {
+        request.setAttribute("feedAddTitle", "피드 추가");
     }
 
     request.setAttribute("extraParam", extraParam);
     request.setAttribute("replyOf", maybeReply);
 %>
-<t:layout pageName="피드 추가" requireLogin="true">
+<t:layout pageName="${feedAddTitle}" requireLogin="true">
     <jsp:attribute name="head">
         <script>
             const sessionKey = localStorage.getItem("session");
@@ -189,7 +192,7 @@
     </jsp:attribute>
     <jsp:body>
         <h2>
-            피드 추가
+            ${feedAddTitle}
         </h2>
         <div class="user-info-container mb-sm">
             <p class="user-info" id="user-info"></p>

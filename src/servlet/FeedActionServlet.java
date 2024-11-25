@@ -3,6 +3,7 @@ import dao.FeedDAO;
 import dao.UserDAO;
 import dao.UserObj;
 import org.json.simple.JSONObject;
+import util.RequestHandler;
 import util.ResponseFormat;
 
 import javax.servlet.*;
@@ -13,47 +14,11 @@ import java.io.IOException;
 @WebServlet("/api/feed/action")
 public class FeedActionServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
 
-        String keyFromSession = (String) request.getSession().getAttribute("key");
-        if (keyFromSession == null) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.NO_SESSION, "Login first"
-                    )
-            );
-            return;
-        }
-
-        String keyFromClient = request.getHeader("Authorization");
-        if (keyFromClient == null || !keyFromClient.equals(keyFromSession)) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.INVALID_SESSION, "Session not match"
-                    )
-            );
-            return;
-        }
-
-        UserObj user;
-        try {
-            UserDAO userDAO = new UserDAO();
-            user = userDAO.get((String) request.getSession().getAttribute("id"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            ResponseFormat.sendJSONResponse(
-                    response, 500, ResponseFormat.messageResponse(
-                            500, ResponseFormat.UNKNOWN_ERROR, "Error while fetching user"
-                    )
-            );
+        UserObj user = RequestHandler.checkUserLoggedIn(request, response);
+        if (user == null) {
             return;
         }
 

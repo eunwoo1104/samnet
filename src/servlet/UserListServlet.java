@@ -3,6 +3,7 @@ package servlet;
 import dao.UserDAO;
 import dao.UserObj;
 import org.json.simple.JSONArray;
+import util.RequestHandler;
 import util.ResponseFormat;
 
 import javax.servlet.*;
@@ -17,27 +18,10 @@ public class UserListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        /*
-        String keyFromSession = (String) request.getSession().getAttribute("key");
-        if (keyFromSession == null) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.NO_SESSION, "Login first"
-                    )
-            );
+        UserObj user = RequestHandler.checkUserLoggedIn(request, response);
+        if (user == null) {
             return;
         }
-
-        String keyFromClient = request.getHeader("Authorization");
-        if (keyFromClient == null || !keyFromClient.equals(keyFromSession)) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.INVALID_SESSION, "Session not match"
-                    )
-            );
-            return;
-        }
-        */
 
         UserDAO userDAO = new UserDAO();
         String query = request.getParameter("query");

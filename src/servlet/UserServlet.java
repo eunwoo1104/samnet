@@ -7,6 +7,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONObject;
 import util.ImageHandler;
+import util.RequestHandler;
 import util.ResponseFormat;
 
 import javax.servlet.*;
@@ -78,39 +79,8 @@ public class UserServlet extends HttpServlet {
         // TODO: change to put or patch
         request.setCharacterEncoding("UTF-8");
 
-        String keyFromSession = (String) request.getSession().getAttribute("key");
-        if (keyFromSession == null) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.NO_SESSION, "Login first"
-                    )
-            );
-            return;
-        }
-
-        String keyFromClient = request.getHeader("Authorization");
-        if (keyFromClient == null || !keyFromClient.equals(keyFromSession)) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.INVALID_SESSION, "Session not match"
-                    )
-            );
-            return;
-        }
-
-        UserDAO userDAO = new UserDAO();
-        UserObj user;
-        try {
-            user = userDAO.get((String) request.getSession().getAttribute("id"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            ResponseFormat.sendJSONResponse(
-                    response, 500, ResponseFormat.messageResponse(
-                            500, ResponseFormat.UNKNOWN_ERROR, "Error while fetching user"
-                    )
-            );
+        UserObj user = RequestHandler.checkUserLoggedIn(request, response);
+        if (user == null) {
             return;
         }
 
@@ -198,6 +168,8 @@ public class UserServlet extends HttpServlet {
             } else if (!setDefaultAvatar) {
                 newAvatar = user.getAvatar();
             }
+
+            UserDAO userDAO = new UserDAO();
             userDAO.update(user.getId(), newEmail, newUsername, newNickname, newBio, newAvatar);
 
             ResponseFormat.sendJSONResponse(
@@ -221,39 +193,8 @@ public class UserServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        String keyFromSession = (String) request.getSession().getAttribute("key");
-        if (keyFromSession == null) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.NO_SESSION, "Login first"
-                    )
-            );
-            return;
-        }
-
-        String keyFromClient = request.getHeader("Authorization");
-        if (keyFromClient == null || !keyFromClient.equals(keyFromSession)) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.INVALID_SESSION, "Session not match"
-                    )
-            );
-            return;
-        }
-
-        UserDAO userDAO = new UserDAO();
-        UserObj user;
-        try {
-            user = userDAO.get((String) request.getSession().getAttribute("id"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            ResponseFormat.sendJSONResponse(
-                    response, 500, ResponseFormat.messageResponse(
-                            500, ResponseFormat.UNKNOWN_ERROR, "Error while fetching user"
-                    )
-            );
+        UserObj user = RequestHandler.checkUserLoggedIn(request, response);
+        if (user == null) {
             return;
         }
 
@@ -267,6 +208,7 @@ public class UserServlet extends HttpServlet {
         }
 
         try {
+            UserDAO userDAO = new UserDAO();
             userDAO.delete(user.getId());
 
             ResponseFormat.sendJSONResponse(

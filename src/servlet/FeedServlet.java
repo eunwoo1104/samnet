@@ -13,6 +13,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONObject;
 import util.ImageHandler;
+import util.RequestHandler;
 import util.ResponseFormat;
 
 @WebServlet("/api/feed")
@@ -70,39 +71,8 @@ public class FeedServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
 
-        String keyFromSession = (String) request.getSession().getAttribute("key");
-        if (keyFromSession == null) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.NO_SESSION, "Login first"
-                    )
-            );
-            return;
-        }
-
-        String keyFromClient = request.getHeader("Authorization");
-        if (keyFromClient == null || !keyFromClient.equals(keyFromSession)) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.INVALID_SESSION, "Session not match"
-                    )
-            );
-            return;
-        }
-
-        UserObj user;
-        try {
-            UserDAO userDAO = new UserDAO();
-            user = userDAO.get((String) request.getSession().getAttribute("id"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            ResponseFormat.sendJSONResponse(
-                    response, 500, ResponseFormat.messageResponse(
-                            500, ResponseFormat.UNKNOWN_ERROR, "Error while fetching user"
-                    )
-            );
+        UserObj user = RequestHandler.checkUserLoggedIn(request, response);
+        if (user == null) {
             return;
         }
 

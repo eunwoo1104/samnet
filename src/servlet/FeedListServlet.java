@@ -6,6 +6,7 @@ import dao.UserDAO;
 import dao.UserObj;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import util.RequestHandler;
 import util.ResponseFormat;
 
 import javax.servlet.*;
@@ -21,23 +22,8 @@ public class FeedListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
 
-        String keyFromSession = (String) request.getSession().getAttribute("key");
-        if (keyFromSession == null) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.NO_SESSION, "Login first"
-                    )
-            );
-            return;
-        }
-
-        String keyFromClient = request.getHeader("Authorization");
-        if (keyFromClient == null || !keyFromClient.equals(keyFromSession)) {
-            ResponseFormat.sendJSONResponse(
-                    response, 403, ResponseFormat.messageResponse(
-                            403, ResponseFormat.INVALID_SESSION, "Session not match"
-                    )
-            );
+        UserObj user = RequestHandler.checkUserLoggedIn(request, response);
+        if (user == null) {
             return;
         }
 
