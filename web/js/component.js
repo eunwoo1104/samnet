@@ -87,16 +87,18 @@ function feedComponent(
     const imageContainer = document.createElement("div");
     imageContainer.className = "feed-image-container mt-xs";
     let imgIncluded = false;
-    feed.images.trim().split(",").forEach(img => {
-        if (!img) return;
-        const imgURL = `${baseURL}/resource/image?id=` + img;
-        const imgChild = document.createElement("img");
-        imgChild.setAttribute("src", imgURL);
-        imgChild.setAttribute("alt", img);
-        imgChild.className = "feed-image";
-        imageContainer.appendChild(imgChild);
-        imgIncluded = true;
-    });
+    if (feed.images) {
+        feed.images.trim().split(",").forEach(img => {
+            if (!img) return;
+            const imgURL = `${baseURL}/resource/image?id=` + img;
+            const imgChild = document.createElement("img");
+            imgChild.setAttribute("src", imgURL);
+            imgChild.setAttribute("alt", img);
+            imgChild.className = "feed-image";
+            imageContainer.appendChild(imgChild);
+            imgIncluded = true;
+        });
+    }
     if (!imgIncluded) {
         imageContainer.style.display = "none";
     }

@@ -147,15 +147,16 @@ public class FeedDAO {
         }
     }
 
-    public boolean update(String idx, String content) throws NamingException, SQLException {
+    public boolean update(String idx, String content, String images) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         try {
-            String sql = "UPDATE feed SET content=?, edited_at=NOW() WHERE idx=?";
+            String sql = "UPDATE feed SET content=?, images=?, edited_at=NOW() WHERE idx=?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, content);
-            stmt.setString(2, idx);
+            stmt.setString(2, images);
+            stmt.setString(3, idx);
 
             int count = stmt.executeUpdate();
             return count == 1;

@@ -18,6 +18,7 @@ public class ResponseFormat {
     public final static String NO_SESSION = "NO_SESSION";
     public final static String INVALID_SESSION = "INVALID_SESSION";
     public final static String USER_BLOCKED = "USER_BLOCKED";
+    public final static String NO_PERMISSION = "NO_PERMISSION";
 
     public static String response(int status, String code) {
         JSONObject obj = new JSONObject();
