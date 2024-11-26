@@ -65,6 +65,7 @@ function feedComponent(
     feedHeader.appendChild(spacer);
 
     if (linkToView) {
+        /*
         const viewButton = document.createElement("div");
         viewButton.className = "clickable";
         viewButton.addEventListener("click", e => {
@@ -75,6 +76,11 @@ function feedComponent(
         viewIcon.textContent = "chevron_right";
         viewButton.appendChild(viewIcon);
         feedHeader.appendChild(viewButton);
+        */
+        container.className += " clickable"
+        container.addEventListener("click", e => {
+            moveto(baseURL + "/feed/view.jsp?id=" + feed.idx);
+        });
     }
 
     container.appendChild(feedHeader);

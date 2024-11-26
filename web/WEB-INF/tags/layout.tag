@@ -32,19 +32,29 @@
     <script>
         function handleMenu() {
             const mainMenu = document.getElementById("main-menu");
+            const accountMenu = document.getElementById("account-menu");
             const displayState = mainMenu.style.display;
+            const opponentState = accountMenu.style.display;
             if (displayState === "none") {
                 mainMenu.style.display = "flex";
+                if (opponentState === "flex") {
+                    accountMenu.style.display = "none";
+                }
             } else {
                 mainMenu.style.display = "none";
             }
         }
 
         function handleAccount() {
+            const mainMenu = document.getElementById("main-menu");
             const accountMenu = document.getElementById("account-menu");
             const displayState = accountMenu.style.display;
+            const opponentState = mainMenu.style.display;
             if (displayState === "none") {
                 accountMenu.style.display = "flex";
+                if (opponentState === "flex") {
+                    mainMenu.style.display = "none";
+                }
             } else {
                 accountMenu.style.display = "none";
             }
