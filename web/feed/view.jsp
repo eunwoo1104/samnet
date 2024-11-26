@@ -27,6 +27,7 @@
     UserObj author = userDAO.get(feed.getUser());
     String currentUser = (String) session.getAttribute("id");
     boolean voted = false;
+    boolean ableToEdit = feed.getUser().equals(currentUser);
     if (currentUser != null && !currentUser.isBlank()) {
         voted = userDAO.likedToFeed(currentUser, feedId);
     }
@@ -44,6 +45,8 @@
     request.setAttribute("initHeartIcon", voted ? "favorite" : "favorite_border");
     request.setAttribute("author", Utils.doubleSlash(author.toJSON().toJSONString()));
     request.setAttribute("fwdFrom" , fwdFrom == null ? "null" : "\"" + fwdFrom + "\"");
+    request.setAttribute("ableToEdit", ableToEdit);
+    request.setAttribute("editButtonDisplay", ableToEdit ? "block" : "none");
 %>
 <t:layout pageName="피드 보기">
     <jsp:attribute name="head">
@@ -55,6 +58,7 @@
             const feed = JSON.parse('${feed}');
             const author = JSON.parse('${author}');
             const fwdFrom = ${fwdFrom};
+            const ableToEdit = ${ableToEdit};
 
             window.onload = () => {
                 const mainFeedArea = document.getElementById("main-feed");
@@ -130,6 +134,14 @@
                         }
                     );
                 });
+
+                if (ableToEdit) {
+                    const editButton = document.getElementById("edit-button");
+                    editButton.addEventListener(
+                        "click",
+                        () => moveto("${pageContext.request.contextPath}/feed/edit.jsp?id=" + feed.idx)
+                    );
+                }
             };
         </script>
         <style>
@@ -160,5 +172,8 @@
             <span class="material-icons">redo</span>
             <p>답장 피드로 돌아가기</p>
         </div>
+        <button class="custom-button mt-lg" style="display: ${editButtonDisplay}" id="edit-button">
+            피드 수정하기
+        </button>
     </jsp:body>
 </t:layout>
