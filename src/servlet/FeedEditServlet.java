@@ -126,6 +126,19 @@ public class FeedEditServlet extends HttpServlet {
                 } else {
                     newImages = imageList.toString();
                 }
+
+                String oldImages = tgtFeed.getImages();
+                if (oldImages != null) {
+                    for (String img: oldImages.split(",")) {
+                        if (img.isBlank()) continue;
+
+                        String dir = imageDAO.get(img);
+                        if (dir != null) {
+                            ImageHandler.deleteImage(dir);
+                        }
+                        imageDAO.delete(img);
+                    }
+                }
             } else {
                 newImages = tgtFeed.getImages();
             }

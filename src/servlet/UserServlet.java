@@ -209,6 +209,17 @@ public class UserServlet extends HttpServlet {
 
         try {
             UserDAO userDAO = new UserDAO();
+            ImageDAO imageDAO = new ImageDAO();
+
+            String avatar = user.getAvatar();
+            if (avatar != null) {
+                String dir = imageDAO.get(avatar);
+                if (dir != null) {
+                    ImageHandler.deleteImage(dir);
+                }
+                imageDAO.delete(avatar);
+            }
+
             userDAO.delete(user.getId());
 
             ResponseFormat.sendJSONResponse(

@@ -52,4 +52,22 @@ public class ImageDAO {
             if (conn != null) conn.close();
         }
     }
+
+    public boolean delete(String idx) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        try {
+            String sql = "DELETE FROM image WHERE idx=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, idx);
+
+            int count = stmt.executeUpdate();
+            return count == 1;
+
+        } finally {
+            if(stmt != null) stmt.close();
+            if(conn != null) conn.close();
+        }
+    }
 }

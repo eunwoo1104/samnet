@@ -26,4 +26,12 @@ public class ImageHandler {
         }
         return savedFile;
     }
+
+    public static boolean deleteImage(String fname) {
+        File image = getImage(fname);
+        if (image == null) {
+            return false;
+        }
+        return image.delete();
+    }
 }
