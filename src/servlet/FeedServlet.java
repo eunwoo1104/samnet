@@ -168,4 +168,72 @@ public class FeedServlet extends HttpServlet {
             );
         }
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+
+        UserObj user = RequestHandler.checkUserLoggedIn(request, response);
+        if (user == null) {
+            return;
+        }
+
+        if (user.isBlocked()) {
+            ResponseFormat.sendJSONResponse(
+                    response, 403, ResponseFormat.messageResponse(
+                            403, ResponseFormat.USER_BLOCKED, "Blocked user"
+                    )
+            );
+            return;
+        }
+
+        String feedId = request.getParameter("id");
+        if (feedId == null || feedId.isBlank()) {
+            ResponseFormat.sendJSONResponse(
+                    response, 404, ResponseFormat.messageResponse(
+                            404, ResponseFormat.INVALID_DATA, "Feed ID missing"
+                    )
+            );
+            return;
+        }
+
+        try {
+            FeedDAO feedDAO = new FeedDAO();
+            FeedObj feed = feedDAO.get(feedId);
+            if (feed == null) {
+                ResponseFormat.sendJSONResponse(
+                        response, 404, ResponseFormat.messageResponse(
+                                404, ResponseFormat.MISSING_DATA, "Feed not found"
+                        )
+                );
+                return;
+            }
+
+            if (!(feed.getUser().equals(user.getId()) || user.isAdmin())) {
+                ResponseFormat.sendJSONResponse(
+                        response, 403, ResponseFormat.messageResponse(
+                                403, ResponseFormat.NO_PERMISSION, "Not a feed author"
+                        )
+                );
+                return;
+            }
+
+            feedDAO.delete(feedId);
+
+            ResponseFormat.sendJSONResponse(
+                    response, 200, ResponseFormat.response(
+                            200, ResponseFormat.OK
+                    )
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            ResponseFormat.sendJSONResponse(
+                    response, 500, ResponseFormat.messageResponse(
+                            500, ResponseFormat.UNKNOWN_ERROR, "SQL Error"
+                    )
+            );
+        }
+    }
 }

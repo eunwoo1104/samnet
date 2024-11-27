@@ -63,6 +63,59 @@
                 previewContainer.style.display = "block";
             }
 
+            function showDeleteDiv() {
+                const deleteDiv = document.getElementById("delete-feed");
+                if (deleteDiv.style.display === "none") {
+                    deleteDiv.style.display = "block";
+                } else {
+                    deleteDiv.style.display = "none";
+                }
+            }
+
+            function deleteFeed() {
+                const deleteButton = document.getElementById("delete-feed-button");
+                deleteButton.disabled = "disabled";
+                $.ajax(
+                    {
+                        url: "${pageContext.request.contextPath}/api/feed?id=" + feedId,
+                        type: "DELETE",
+                        dataType: "json",
+                        beforeSend: xhr => {
+                            xhr.setRequestHeader("Authorization", sessionKey);
+                        },
+                        success: data => {
+                            alert("피드가 정상적으로 삭제되었습니다.");
+                            moveto("${pageContext.request.contextPath}/feed");
+                        },
+                        error: (xhr, status, error) => {
+                            // console.log(xhr);
+                            const data = xhr.responseJSON;
+                            let msg = "";
+                            switch (data.code) {
+                                case "NO_SESSION":
+                                case "INVALID_SESSION":
+                                    msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
+                                    break;
+                                case "USER_BLOCKED":
+                                    msg = "피드 삭제 권한이 없습니다.";
+                                    break;
+                                case "INVALID_DATA":
+                                    msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
+                                    break;
+                                case "MISSING_DATA":
+                                    msg = "피드를 찾을 수 없습니다.";
+                                    break;
+                                default:
+                                    msg = "알 수 없는 오류가 발생하였습니다.";
+                                    break;
+                            }
+                            alert(msg);
+                            deleteButton.disabled = null;
+                        }
+                    }
+                );
+            }
+
             window.onload = () => {
                 if (!feed) return;
 
@@ -239,5 +292,18 @@
                 <p>placeholder</p>
             </div>
         </form>
+        <button class="custom-button mt-lg" style="color: lightcoral; border-color: lightcoral" onclick="showDeleteDiv()">
+            피드 삭제
+        </button>
+        <div class="mt-mid" style="display: none" id="delete-feed">
+            <p>
+                정말로 이 피드를 삭제하시겠어요?<br>삭제 후에는
+                <span style="color: lightcoral; text-decoration: underline">복구가 불가능합니다.</span><br><br>
+                삭제하시려면 아래 버튼을 눌러주세요.
+            </p>
+            <button class="mt-lg custom-button" style="color: lightcoral; border-color: lightcoral" id="delete-feed-button" onclick="deleteFeed()">
+                삭제하기
+            </button>
+        </div>
     </jsp:body>
 </t:layout>

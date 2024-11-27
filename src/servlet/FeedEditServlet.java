@@ -107,7 +107,7 @@ public class FeedEditServlet extends HttpServlet {
             if (!(tgtFeed.getUser().equals(user.getId()) || user.isAdmin())) {
                 ResponseFormat.sendJSONResponse(
                         response, 403, ResponseFormat.messageResponse(
-                                403, ResponseFormat.NO_PERMISSION, "Not user's feed"
+                                403, ResponseFormat.NO_PERMISSION, "Not a feed author"
                         )
                 );
                 return;

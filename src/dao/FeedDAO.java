@@ -210,15 +210,14 @@ public class FeedDAO {
         }
     }
 
-    public boolean delete(String idx, String uid) throws NamingException, SQLException {
+    public boolean delete(String idx) throws NamingException, SQLException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
         try {
-            String sql = "DELETE FROM feed WHERE idx=? AND user=?";
+            String sql = "DELETE FROM feed WHERE idx=?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, idx);
-            stmt.setString(1, uid);
 
             int count = stmt.executeUpdate();
             return count == 1;
