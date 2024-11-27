@@ -99,7 +99,7 @@
     </h1>
     <% if (session.getAttribute("key") == null) { %>
     <span class="material-icons clickable" style="flex-basis: 0" onclick="moveto(
-        '${pageContext.request.contextPath}/user/login.jsp?redirect=' + encodeURIComponent(window.location.href)
+        '${pageContext.request.contextPath}/user/restore.jsp?redirect=' + encodeURIComponent(window.location.href)
             )">login</span>
     <% } else { %>
     <span class="material-icons clickable" style="flex-basis: 0" onclick="handleAccount()">account_circle</span>
