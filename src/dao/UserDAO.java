@@ -32,6 +32,25 @@ public class UserDAO {
         }
     }
 
+    public boolean postLogin(String id, String key) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        try {
+            String sql = "UPDATE user SET session=?, last_login=NOW() WHERE id=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, key);
+            stmt.setString(2, id);
+
+            int count = stmt.executeUpdate();
+            return count == 1;
+
+        } finally {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
     public boolean exists(String email) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
@@ -95,6 +114,28 @@ public class UserDAO {
                     rs.getString("created_at"),
                     rs.getInt("flag")
             );
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public String getUIDFromSession(String session) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT id FROM user WHERE session=? AND TIMESTAMPDIFF(DAY, last_login, NOW()) <= 5";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, session);
+
+            rs = stmt.executeQuery();
+            if (!rs.next()) return null;
+
+            return rs.getString("id");
 
         } finally {
             if (rs != null) rs.close();

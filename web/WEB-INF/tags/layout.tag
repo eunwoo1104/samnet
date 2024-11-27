@@ -11,7 +11,7 @@
                 query = "";
             }
             String tgtUrl = request.getServletPath() + "%3F" + query;
-            response.sendRedirect(request.getContextPath() + "/user/login.jsp?redirect=" + tgtUrl);
+            response.sendRedirect(request.getContextPath() + "/user/restore.jsp?redirect=" + tgtUrl);
             return;
         }
     }

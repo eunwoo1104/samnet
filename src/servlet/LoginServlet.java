@@ -56,6 +56,7 @@ public class LoginServlet extends HttpServlet {
             request.getSession().setAttribute("key", sessionKey);
             JSONObject body = new JSONObject();
             body.put("session", sessionKey);
+            userDAO.postLogin(user.getId(), sessionKey);
 
             ResponseFormat.sendJSONResponse(
                     response, 200, ResponseFormat.response(

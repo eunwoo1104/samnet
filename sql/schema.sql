@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS user(
     avatar VARCHAR(10) NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     flag TINYINT NOT NULL DEFAULT 0,
+    session CHAR(36) NULL DEFAULT NULL,
+    last_login TIMESTAMP NULL DEFAULT NULL,
     FULLTEXT KEY (email, nickname, username, bio)
     );
 
