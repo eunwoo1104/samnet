@@ -123,7 +123,7 @@
             </a>
         </div>
     </div>
-    <div class="main-menu content-margin" id="account-menu" style="display: none">
+    <div class="main-menu content-margin-right" id="account-menu" style="display: none">
         <div>
             <a href="${pageContext.request.contextPath}/user">
                 내 정보
@@ -132,6 +132,16 @@
         <div>
             <a href="${pageContext.request.contextPath}/user/logout.jsp">
                 로그아웃
+            </a>
+        </div>
+        <div>
+            <a href="${pageContext.request.contextPath}/tos.jsp">
+                서비스 이용약관
+            </a>
+        </div>
+        <div>
+            <a href="${pageContext.request.contextPath}/privacy.jsp">
+                개인정보처리방침
             </a>
         </div>
     </div>

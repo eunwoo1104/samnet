@@ -113,7 +113,12 @@
             </label>
             <label>
                 유저네임
-                <input name="username" type="text" placeholder="유저네임" pattern="^[a-zA-Z0-9]+$" required>
+                <input class="mb-mid" name="username" type="text" placeholder="유저네임" pattern="^[a-zA-Z0-9]+$" required>
+            </label>
+            <label>
+                아래 버튼을 눌러 회원가입 시
+                <a href="${pageContext.request.contextPath}/tos.jsp" target="_blank" rel="noreferrer noopener">서비스 이용약관</a> 및
+                <a href="${pageContext.request.contextPath}/privacy.jsp" target="_blank" rel="noreferrer noopener">개인정보처리방침</a>에 동의하는 것으로 간주됩니다.
             </label>
             <input class="custom-button" type="submit" value="회원가입" id="submit-input">
             <div style="display: none" id="submit-message">

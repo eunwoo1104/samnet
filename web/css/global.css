@@ -82,7 +82,12 @@ header, footer, .content {
     padding: 0 1.75rem;
 }
 
-.content-margin {
+
+.content-margin-left {
+    margin-left: 1.75rem;
+}
+
+.content-margin-right {
     margin-right: 1.75rem;
 }
 
