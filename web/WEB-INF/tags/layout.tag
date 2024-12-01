@@ -29,6 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/global.js"></script>
     <script src="${pageContext.request.contextPath}/js/component.js"></script>
+    <script src="${pageContext.request.contextPath}/js/requester.js"></script>
     <script>
         function handleMenu() {
             const mainMenu = document.getElementById("main-menu");
@@ -102,7 +103,7 @@
         '${pageContext.request.contextPath}/user/restore.jsp?redirect=' + encodeURIComponent(window.location.href)
             )">login</span>
     <% } else { %>
-    <span class="material-icons clickable" style="flex-basis: 0" onclick="handleAccount()">account_circle</span>
+    <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="handleAccount()">account_circle</span>
     <% } %>
 </header>
 <div class="content flex-col">

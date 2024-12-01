@@ -24,7 +24,7 @@ public class UserServlet extends HttpServlet {
 
         String keyFromSession = (String) request.getSession().getAttribute("key");
         String keyFromClient = request.getHeader("Authorization");
-        String targetUser = request.getParameter("user");
+        String targetUser = request.getParameter("id");
         String currentUser = (String) request.getSession().getAttribute("id");
         if (targetUser == null && keyFromSession == null) {
             ResponseFormat.sendJSONResponse(

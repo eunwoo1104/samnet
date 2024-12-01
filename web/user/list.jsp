@@ -28,35 +28,20 @@
                 form.addEventListener("submit", event => {
                     event.preventDefault();
 
-                    let urlQuery = "?";
-                    if (page > 0) {
-                        urlQuery += "page=" + page;
-                    }
-                    urlQuery += "&query=" + event.target.query.value;
-                    $.ajax(
-                        {
-                            url: "${pageContext.request.contextPath}/api/user/list" + urlQuery,
-                            type: "GET",
-                            dataType: "json",
-                            beforeSend: xhr => {
-                                xhr.setRequestHeader("Authorization", localStorage.getItem("session"));
-                            },
-                            success: data => {
-                                const users = data.data;
-                                renderList(users, page === 1);
-                                if (users.length) {
-                                    msg.style.display = "none";
-                                } else {
-                                    msg.style.display = "block";
-                                    msg.textContent = "검색 결과가 없습니다.";
-                                }
-                            },
-                            error: (xhr, status, error) => {
-                                // TODO: different actions per error codes
-                                alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                    const searchQuery = event.target.query.value;
+                    api("${pageContext.request.contextPath}", true, true)
+                        .user.list(page, searchQuery, users => {
+                            renderList(users, page === 1);
+                            if (users.length) {
+                                msg.style.display = "none";
+                            } else {
+                                msg.style.display = "block";
+                                msg.textContent = "검색 결과가 없습니다.";
                             }
-                        }
-                    );
+                        }, (xhr, status, error) => {
+                            // TODO: different actions per error codes
+                            alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                        });
                 });
             }
         </script>

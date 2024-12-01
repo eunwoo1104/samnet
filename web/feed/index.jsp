@@ -14,37 +14,9 @@
             const loggedInUser = ${loggedInUser};
             let currentPage = 1;
 
-            function getFeeds(page=1, runAsync=true, callback=null) {
-                let feedList = null;
-                let urlQuery = "?";
-                if (page > 0) {
-                    urlQuery += "page=" + page;
-                }
-                if (targetUser) {
-                    urlQuery += "&user=" + targetUser;
-                }
-                $.ajax(
-                    {
-                        url: "${pageContext.request.contextPath}/api/feed/list" + urlQuery,
-                        type: "GET",
-                        dataType: "json",
-                        async: runAsync,
-                        beforeSend: xhr => {
-                            xhr.setRequestHeader("Authorization", localStorage.getItem("session"));
-                        },
-                        success: data => {
-                            feedList = data.data;
-                            if (callback) {
-                                callback(feedList);
-                            }
-                        },
-                        error: (xhr, status, error) => {
-                            // TODO: different actions per error codes
-                            alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-                        }
-                    }
-                );
-                return feedList;
+            function onError(xhr, status, error) {
+                // TODO: different actions per error codes
+                alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
             }
 
             function loadFeeds() {
@@ -52,26 +24,29 @@
                 const loadButton = document.getElementById("load-feed");
                 loadButton.disabled = "disabled"
                 loadButton.textContent = "로드중..."
-                getFeeds(++currentPage, true, feeds => {
-                    if (feeds.length === 0) {
-                        loadButton.textContent = "더이상 피드가 없어요.";
-                        return;
-                    }
-                    feeds.forEach((feed, index) => {
-                        const renderedFeed = feedComponent(
-                            feed,
-                            feed.author,
-                            "${pageContext.request.contextPath}",
-                            index+1 !== feedList.length,
-                            true
-                        );
-                        feedListArea.appendChild(renderedFeed);
-                    });
-                    loadButton.disabled = null;
-                });
+                api("${pageContext.request.contextPath}", true, true).feed.list(
+                    ++currentPage, targetUser, feeds => {
+                        if (feeds.length === 0) {
+                            loadButton.textContent = "더이상 피드가 없어요.";
+                            return;
+                        }
+                        feeds.forEach((feed, index) => {
+                            const renderedFeed = feedComponent(
+                                feed,
+                                feed.author,
+                                "${pageContext.request.contextPath}",
+                                index + 1 !== feedList.length,
+                                true
+                            );
+                            feedListArea.appendChild(renderedFeed);
+                        });
+                        loadButton.disabled = null;
+                    }, onError
+                );
             }
 
-            let feedList = getFeeds(1, false);
+            let feedList = api("${pageContext.request.contextPath}", true, false)
+                .feed.list(currentPage, targetUser, null, onError);
 
             window.onload = () => {
                 const feedListArea = document.getElementById("feed-list");
@@ -105,7 +80,7 @@
                         feed,
                         feed.author,
                         "${pageContext.request.contextPath}",
-                        index+1 !== feedList.length,
+                        index + 1 !== feedList.length,
                         true
                     );
                     feedListArea.appendChild(renderedFeed);
@@ -126,7 +101,8 @@
         <button class="custom-button mt-mid" style="display: none" onclick="loadFeeds()" id="load-feed">
             더 불러오기
         </button>
-        <button class="custom-button mt-mid" style="display: none" onclick="moveto('${pageContext.request.contextPath}/user/list.jsp')" id="search-user">
+        <button class="custom-button mt-mid" style="display: none"
+                onclick="moveto('${pageContext.request.contextPath}/user/list.jsp')" id="search-user">
             새 친구 팔로우하기
         </button>
         <button class="custom-button mt-mid" style="display: none" onclick="moveto('add.jsp')" id="add-feed">

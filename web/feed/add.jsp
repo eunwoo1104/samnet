@@ -23,26 +23,15 @@
             }
 
             window.onload = () => {
-                const userInfo = document.getElementById("user-info")
-                $.ajax(
-                    {
-                        url: "${pageContext.request.contextPath}/api/user",
-                        type: "GET",
-                        dataType: "json",
-                        beforeSend: xhr => {
-                            xhr.setRequestHeader("Authorization", sessionKey);
-                        },
-                        success: data => {
-                            const user = data.data;
-                            userInfo.innerHTML = "<span class='bold'>@" + user.username + "(" + user.email + ")</span>로 로그인됨";
-                        },
-                        error: (xhr, status, error) => {
-                            // TODO: different error messages per error codes
-                            alert("세션 오류로 다시 로그인해주세요.");
-                            moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp${extraParam}");
-                        }
-                    }
-                );
+                const userInfo = document.getElementById("user-info");
+                api("${pageContext.request.contextPath}", true, true)
+                    .user.get(null, user => {
+                        userInfo.innerHTML = "<span class='bold'>@" + user.username + "(" + user.email + ")</span>로 로그인됨";
+                    }, (xhr, status, error) => {
+                        // TODO: different error messages per error codes
+                        alert("세션 오류로 다시 로그인해주세요.");
+                        moveto("${pageContext.request.contextPath}/user/login.jsp?redirect=/feed/add.jsp${extraParam}");
+                    });
 
                 const fileInput = document.getElementById("file");
                 fileInput.addEventListener("change", event => {
@@ -102,55 +91,41 @@
                     const upload = document.getElementById("upload");
                     upload.disabled = "disabled";
 
-                    $.ajax(
-                        {
-                            url: "${pageContext.request.contextPath}/api/feed",
-                            type: "POST",
-                            dataType: "json",
-                            data: submitData,
-                            processData: false,
-                            contentType: false,
-                            beforeSend: xhr => {
-                                xhr.setRequestHeader("Authorization", sessionKey);
-                            },
-                            success: data => {
-                                const feedId = data.data.id;
-                                const msgDiv = document.getElementById("submit-message");
-                                msgDiv.children[0].innerText = "업로드 성공! 잠시 후 피드로 이동합니다.";
-                                msgDiv.className = "ok-box";
-                                msgDiv.style.display = "block";
+                    api("${pageContext.request.contextPath}", true, true)
+                        .feed.post(submitData, data => {
+                            const feedId = data.id;
+                            const msgDiv = document.getElementById("submit-message");
+                            msgDiv.children[0].innerText = "업로드 성공! 잠시 후 피드로 이동합니다.";
+                            msgDiv.className = "ok-box";
+                            msgDiv.style.display = "block";
 
-                                sleep(3 * 1000).then(() => {
-                                    window.location.href = "${pageContext.request.contextPath}/feed/view.jsp?id=" + feedId;
-                                });
-                            },
-                            error: (xhr, status, error) => {
-                                // console.log(xhr);
-                                const data = xhr.responseJSON;
-                                let msg = "";
-                                switch (data.code) {
-                                    case "NO_SESSION":
-                                    case "INVALID_SESSION":
-                                        msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
-                                        break;
-                                    case "USER_BLOCKED":
-                                        msg = "피드 추가 권한이 없습니다.";
-                                        break;
-                                    case "INVALID_DATA":
-                                        msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
-                                        break;
-                                    default:
-                                        msg = "알 수 없는 오류가 발생하였습니다.";
-                                        break;
-                                }
-                                const msgDiv = document.getElementById("submit-message");
-                                msgDiv.children[0].innerText = msg;
-                                msgDiv.className = "error-box";
-                                msgDiv.style.display = "block";
-                                upload.disabled = null;
+                            sleep(3 * 1000).then(() => {
+                                moveto("${pageContext.request.contextPath}/feed/view.jsp?id=" + feedId);
+                            });
+                        }, (xhr, status, error) => {
+                            const data = xhr.responseJSON;
+                            let msg = "";
+                            switch (data.code) {
+                                case "NO_SESSION":
+                                case "INVALID_SESSION":
+                                    msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
+                                    break;
+                                case "USER_BLOCKED":
+                                    msg = "피드 추가 권한이 없습니다.";
+                                    break;
+                                case "INVALID_DATA":
+                                    msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
+                                    break;
+                                default:
+                                    msg = "알 수 없는 오류가 발생하였습니다.";
+                                    break;
                             }
-                        }
-                    );
+                            const msgDiv = document.getElementById("submit-message");
+                            msgDiv.children[0].innerText = msg;
+                            msgDiv.className = "error-box";
+                            msgDiv.style.display = "block";
+                            upload.disabled = null;
+                        });
                 });
             }
         </script>

@@ -16,27 +16,16 @@
         <script>
             const sessionKey = localStorage.getItem("session");
             const feedId = ${feedId};
-            let feed = null;
             let imgChanged = null;
             let showImg = false;
-            $.ajax(
-                {
-                    url: "${pageContext.request.contextPath}/api/feed?id=" + feedId,
-                    type: "GET",
-                    dataType: "json",
-                    async: false,
-                    beforeSend: xhr => {
-                        xhr.setRequestHeader("Authorization", sessionKey);
-                    },
-                    success: data => {
-                        feed = data.data;
-                    },
-                    error: (xhr, status, error) => {
-                        // TODO: different actions per error codes
-                        alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-                    }
-                }
-            );
+
+            function onError(xhr, status, error) {
+                // TODO: different actions per error codes
+                alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            }
+
+            let feed = api("${pageContext.request.contextPath}", true, false)
+                .feed.get(feedId, null, onError);
 
             function resetPreviews(images) {
                 const previewContainer = document.getElementById("preview-container");
@@ -75,45 +64,35 @@
             function deleteFeed() {
                 const deleteButton = document.getElementById("delete-feed-button");
                 deleteButton.disabled = "disabled";
-                $.ajax(
-                    {
-                        url: "${pageContext.request.contextPath}/api/feed?id=" + feedId,
-                        type: "DELETE",
-                        dataType: "json",
-                        beforeSend: xhr => {
-                            xhr.setRequestHeader("Authorization", sessionKey);
-                        },
-                        success: data => {
-                            alert("피드가 정상적으로 삭제되었습니다.");
-                            moveto("${pageContext.request.contextPath}/feed");
-                        },
-                        error: (xhr, status, error) => {
-                            // console.log(xhr);
-                            const data = xhr.responseJSON;
-                            let msg = "";
-                            switch (data.code) {
-                                case "NO_SESSION":
-                                case "INVALID_SESSION":
-                                    msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
-                                    break;
-                                case "USER_BLOCKED":
-                                    msg = "피드 삭제 권한이 없습니다.";
-                                    break;
-                                case "INVALID_DATA":
-                                    msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
-                                    break;
-                                case "MISSING_DATA":
-                                    msg = "피드를 찾을 수 없습니다.";
-                                    break;
-                                default:
-                                    msg = "알 수 없는 오류가 발생하였습니다.";
-                                    break;
-                            }
-                            alert(msg);
-                            deleteButton.disabled = null;
-                        }
+                api("${pageContext.request.contextPath}", true, true)
+                    .feed.delete(feedId, data => {
+                    alert("피드가 정상적으로 삭제되었습니다.");
+                    moveto("${pageContext.request.contextPath}/feed");
+                }, (xhr, status, error) => {
+                    // console.log(xhr);
+                    const data = xhr.responseJSON;
+                    let msg = "";
+                    switch (data.code) {
+                        case "NO_SESSION":
+                        case "INVALID_SESSION":
+                            msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
+                            break;
+                        case "USER_BLOCKED":
+                            msg = "피드 삭제 권한이 없습니다.";
+                            break;
+                        case "INVALID_DATA":
+                            msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
+                            break;
+                        case "MISSING_DATA":
+                            msg = "피드를 찾을 수 없습니다.";
+                            break;
+                        default:
+                            msg = "알 수 없는 오류가 발생하였습니다.";
+                            break;
                     }
-                );
+                    alert(msg);
+                    deleteButton.disabled = null;
+                });
             }
 
             window.onload = () => {
@@ -140,7 +119,7 @@
                         f => {
                             fileList += f.name + "<br>";
                             const imgURL = URL.createObjectURL(f);
-                            return { src: imgURL, alt: f.name };
+                            return {src: imgURL, alt: f.name};
                         }
                     ));
 
@@ -188,55 +167,41 @@
                     const editButton = document.getElementById("edit");
                     editButton.disabled = "disabled";
 
-                    $.ajax(
-                        {
-                            url: "${pageContext.request.contextPath}/api/feed/edit",
-                            type: "POST",
-                            dataType: "json",
-                            data: submitData,
-                            processData: false,
-                            contentType: false,
-                            beforeSend: xhr => {
-                                xhr.setRequestHeader("Authorization", sessionKey);
-                            },
-                            success: data => {
-                                const msgDiv = document.getElementById("submit-message");
-                                msgDiv.children[0].innerText = "수정 성공! 잠시 후 피드로 이동합니다.";
-                                msgDiv.className = "ok-box mt-mid";
-                                msgDiv.style.display = "block";
+                    api("${pageContext.request.contextPath}/feed", true, true)
+                        .feed.edit(submitData, data => {
+                            const msgDiv = document.getElementById("submit-message");
+                            msgDiv.children[0].innerText = "수정 성공! 잠시 후 피드로 이동합니다.";
+                            msgDiv.className = "ok-box mt-mid";
+                            msgDiv.style.display = "block";
 
-                                sleep(3 * 1000).then(() => {
-                                    window.location.href = "${pageContext.request.contextPath}/feed/view.jsp?id=" + feedId;
-                                });
-                            },
-                            error: (xhr, status, error) => {
-                                // console.log(xhr);
-                                const data = xhr.responseJSON;
-                                let msg = "";
-                                switch (data.code) {
-                                    case "NO_SESSION":
-                                    case "INVALID_SESSION":
-                                        msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
-                                        break;
-                                    case "USER_BLOCKED":
-                                    case "NO_PERMISSION":
-                                        msg = "피드 수정 권한이 없습니다.";
-                                        break;
-                                    case "INVALID_DATA":
-                                        msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
-                                        break;
-                                    default:
-                                        msg = "알 수 없는 오류가 발생하였습니다.";
-                                        break;
-                                }
-                                const msgDiv = document.getElementById("submit-message");
-                                msgDiv.children[0].innerText = msg;
-                                msgDiv.className = "error-box mt-mid";
-                                msgDiv.style.display = "block";
-                                editButton.disabled = null;
+                            sleep(3 * 1000).then(() => {
+                            moveto("${pageContext.request.contextPath}/feed/view.jsp?id=" + feedId);
+                            });
+                        }, (xhr, status, error) => {
+                            const data = xhr.responseJSON;
+                            let msg = "";
+                            switch (data.code) {
+                                case "NO_SESSION":
+                                case "INVALID_SESSION":
+                                    msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
+                                    break;
+                                case "USER_BLOCKED":
+                                case "NO_PERMISSION":
+                                    msg = "피드 수정 권한이 없습니다.";
+                                    break;
+                                case "INVALID_DATA":
+                                    msg = "데이터에 오류가 있습니다. 새로고침 후 다시 시도해주세요.";
+                                    break;
+                                default:
+                                    msg = "알 수 없는 오류가 발생하였습니다.";
+                                    break;
                             }
-                        }
-                    );
+                            const msgDiv = document.getElementById("submit-message");
+                            msgDiv.children[0].innerText = msg;
+                            msgDiv.className = "error-box mt-mid";
+                            msgDiv.style.display = "block";
+                            editButton.disabled = null;
+                        });
                 });
             }
         </script>
@@ -292,7 +257,8 @@
                 <p>placeholder</p>
             </div>
         </form>
-        <button class="custom-button mt-lg" style="color: lightcoral; border-color: lightcoral" onclick="showDeleteDiv()">
+        <button class="custom-button mt-lg" style="color: lightcoral; border-color: lightcoral"
+                onclick="showDeleteDiv()">
             피드 삭제
         </button>
         <div class="mt-mid" style="display: none" id="delete-feed">
@@ -301,7 +267,8 @@
                 <span style="color: lightcoral; text-decoration: underline">복구가 불가능합니다.</span><br><br>
                 삭제하시려면 아래 버튼을 눌러주세요.
             </p>
-            <button class="mt-lg custom-button" style="color: lightcoral; border-color: lightcoral" id="delete-feed-button" onclick="deleteFeed()">
+            <button class="mt-lg custom-button" style="color: lightcoral; border-color: lightcoral"
+                    id="delete-feed-button" onclick="deleteFeed()">
                 삭제하기
             </button>
         </div>

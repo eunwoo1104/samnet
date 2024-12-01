@@ -84,55 +84,43 @@
                     }
 
                     const requestData = {feed: feed.idx, heart: true};
-                    $.ajax(
-                        {
-                            url: "${pageContext.request.contextPath}/api/feed/action",
-                            type: "POST",
-                            dataType: "json",
-                            data: requestData,
-                            beforeSend: xhr => {
-                                xhr.setRequestHeader("Authorization", sessionKey);
-                            },
-                            success: data => {
-                                while (likeButton.lastChild) {
-                                    likeButton.removeChild(likeButton.lastChild);
-                                }
-
-                                const res = data.data;
-                                const heartIcon = res.heart ? "favorite" : "favorite_border";
-                                const heartSpan = document.createElement("span");
-                                heartSpan.className = "material-icons";
-                                heartSpan.textContent = heartIcon;
-                                if (res.heart) {
-                                    heartSpan.style.color = "red";
-                                }
-                                const heartCount = document.createElement("p");
-                                heartCount.textContent = res.heartCount + "개";
-
-                                likeButton.appendChild(heartSpan);
-                                likeButton.appendChild(heartCount);
-                            },
-                            error: (xhr, status, error) => {
-                                // console.log(xhr);
-                                const data = xhr.responseJSON;
-                                let msg = "";
-                                switch (data.code) {
-                                    case "NO_SESSION":
-                                    case "INVALID_SESSION":
-                                        msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
-                                        break;
-                                    case "USER_BLOCKED":
-                                        msg = "좋아요 권한이 없습니다.";
-                                        break;
-                                    default:
-                                        msg = "알 수 없는 오류가 발생하였습니다.";
-                                        break;
-                                }
-                                // TODO: better handling
-                                alert(msg);
+                    api("${pageContext.request.contextPath}", true, true)
+                        .feed.action(requestData, res => {
+                            while (likeButton.lastChild) {
+                                likeButton.removeChild(likeButton.lastChild);
                             }
-                        }
-                    );
+
+                            const heartIcon = res.heart ? "favorite" : "favorite_border";
+                            const heartSpan = document.createElement("span");
+                            heartSpan.className = "material-icons";
+                            heartSpan.textContent = heartIcon;
+                            if (res.heart) {
+                                heartSpan.style.color = "red";
+                            }
+                            const heartCount = document.createElement("p");
+                            heartCount.textContent = res.heartCount + "개";
+
+                            likeButton.appendChild(heartSpan);
+                            likeButton.appendChild(heartCount);
+                        }, (xhr, status, error) => {
+                            // console.log(xhr);
+                            const data = xhr.responseJSON;
+                            let msg = "";
+                            switch (data.code) {
+                                case "NO_SESSION":
+                                case "INVALID_SESSION":
+                                    msg = "로그인 정보에 오류가 있습니다. 다시 로그인해주세요.";
+                                    break;
+                                case "USER_BLOCKED":
+                                    msg = "좋아요 권한이 없습니다.";
+                                    break;
+                                default:
+                                    msg = "알 수 없는 오류가 발생하였습니다.";
+                                    break;
+                            }
+                            // TODO: better handling
+                            alert(msg);
+                        });
                 });
 
                 if (ableToEdit) {
