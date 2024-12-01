@@ -60,6 +60,13 @@
                 accountMenu.style.display = "none";
             }
         }
+
+        function closeMenu() {
+            const mainMenu = document.getElementById("main-menu");
+            const accountMenu = document.getElementById("account-menu");
+            mainMenu.style.display = "none";
+            accountMenu.style.display = "none";
+        }
     </script>
     <style>
         .main-menu {
@@ -69,10 +76,11 @@
             align-items: start;
             gap: 0.5rem;
             background-color: #23272A;
-            margin-top: 0.5rem;
+            margin-top: 4rem;
             padding: 1rem;
             border-radius: 0.5rem;
             z-index: 10;
+            color: white;
         }
 
         .main-menu#main-menu {
@@ -106,46 +114,46 @@
     <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="handleAccount()">account_circle</span>
     <% } %>
 </header>
-<div class="content flex-col">
-    <div class="main-menu" id="main-menu" style="display: none">
-        <div>
-            <a href="${pageContext.request.contextPath}/feed">
-                피드 목록
-            </a>
-        </div>
-        <div>
-            <a href="${pageContext.request.contextPath}/feed/add.jsp">
-                피드 작성
-            </a>
-        </div>
-        <div>
-            <a href="${pageContext.request.contextPath}/user/list.jsp">
-                유저 검색
-            </a>
-        </div>
+<div class="main-menu content-margin-left" id="main-menu" style="display: none">
+    <div>
+        <a href="${pageContext.request.contextPath}/feed">
+            피드 목록
+        </a>
     </div>
-    <div class="main-menu content-margin-right" id="account-menu" style="display: none">
-        <div>
-            <a href="${pageContext.request.contextPath}/user">
-                내 정보
-            </a>
-        </div>
-        <div>
-            <a href="${pageContext.request.contextPath}/user/logout.jsp">
-                로그아웃
-            </a>
-        </div>
-        <div>
-            <a href="${pageContext.request.contextPath}/tos.jsp">
-                서비스 이용약관
-            </a>
-        </div>
-        <div>
-            <a href="${pageContext.request.contextPath}/privacy.jsp">
-                개인정보처리방침
-            </a>
-        </div>
+    <div>
+        <a href="${pageContext.request.contextPath}/feed/add.jsp">
+            피드 작성
+        </a>
     </div>
+    <div>
+        <a href="${pageContext.request.contextPath}/user/list.jsp">
+            유저 검색
+        </a>
+    </div>
+</div>
+<div class="main-menu content-margin-right" id="account-menu" style="display: none">
+    <div>
+        <a href="${pageContext.request.contextPath}/user">
+            내 정보
+        </a>
+    </div>
+    <div>
+        <a href="${pageContext.request.contextPath}/user/logout.jsp">
+            로그아웃
+        </a>
+    </div>
+    <div>
+        <a href="${pageContext.request.contextPath}/tos.jsp">
+            서비스 이용약관
+        </a>
+    </div>
+    <div>
+        <a href="${pageContext.request.contextPath}/privacy.jsp">
+            개인정보처리방침
+        </a>
+    </div>
+</div>
+<div class="content flex-col" onclick="closeMenu()">
     <jsp:doBody/>
     <% if (fillBlank == null || fillBlank.equals("true")) { %>
     <div style="flex-grow: 1;"></div>
