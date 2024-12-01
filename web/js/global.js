@@ -6,13 +6,17 @@ function moveto(url) {
     window.location.href = url;
 }
 
-function escapeHTML(text) {
-    return text
+function escapeHTML(text, lineBreak=false) {
+    let newText = text
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    if (lineBreak) {
+        newText = newText.replace(/(\r\n|\r|\n)/g, "<br>");
+    }
+    return newText;
 }
 
 function limitTextLength(text, maxSize) {

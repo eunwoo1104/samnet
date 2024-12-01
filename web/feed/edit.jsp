@@ -167,7 +167,7 @@
                     const editButton = document.getElementById("edit");
                     editButton.disabled = "disabled";
 
-                    api("${pageContext.request.contextPath}/feed", true, true)
+                    api("${pageContext.request.contextPath}", true, true)
                         .feed.edit(submitData, data => {
                             const msgDiv = document.getElementById("submit-message");
                             msgDiv.children[0].innerText = "수정 성공! 잠시 후 피드로 이동합니다.";

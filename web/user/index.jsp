@@ -25,7 +25,6 @@
             const loggedInUser = ${loggedInUser};
             const sameUser = !targetId || loggedInUser === targetId;
 
-            console.log(${requireLogin});
             let targetUser = api("${pageContext.request.contextPath}", ${requireLogin}, false)
                 .user.get(targetId ? targetId : null, null, (xhr, status, error) => {
                     // TODO: different actions per error codes
@@ -138,7 +137,7 @@
                 if (targetUser.bio) {
                     const bio = document.createElement("p");
                     bio.className = "pf-bio"
-                    bio.textContent = escapeHTML(targetUser.bio);
+                    bio.innerHTML = escapeHTML(targetUser.bio, true);
                     renderArea.appendChild(bio);
                 }
             }

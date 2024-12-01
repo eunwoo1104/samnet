@@ -122,9 +122,9 @@ public class UserServlet extends HttpServlet {
                         newEmail = item.getString("UTF-8").trim();
                     } else if (name.equals("nickname")) {
                         newNickname = item.getString("UTF-8").trim();
-                    } else if (name.equals("newUsername")) {
+                    } else if (name.equals("username")) {
                         newUsername = item.getString("UTF-8").trim();
-                    } else if (name.equals("newBio")) {
+                    } else if (name.equals("bio")) {
                         newBio = item.getString("UTF-8").trim();
                     } else if (name.equals("defaultAvatar")) {
                         String defaultAvatar = item.getString("UTF-8").trim();
