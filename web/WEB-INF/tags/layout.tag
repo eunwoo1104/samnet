@@ -67,6 +67,18 @@
             mainMenu.style.display = "none";
             accountMenu.style.display = "none";
         }
+
+        function setRootMessage(content, boxClass) {
+            const rootMessage = document.getElementById("root-message-box");
+            rootMessage.className += " " + boxClass;
+            rootMessage.children[0].innerText = content;
+            rootMessage.style.display = "block";
+        }
+
+        function closeRootMessage() {
+            const rootMessage = document.getElementById("root-message-box");
+            rootMessage.style.display = "none";
+        }
     </script>
     <style>
         .main-menu {
@@ -154,6 +166,9 @@
     </div>
 </div>
 <div class="content flex-col" onclick="closeMenu()">
+    <div class="mt-lg clickable" id="root-message-box" style="display: none" onclick="closeRootMessage()">
+        <p>placeholder</p>
+    </div>
     <jsp:doBody/>
     <% if (fillBlank == null || fillBlank.equals("true")) { %>
     <div style="flex-grow: 1;"></div>
