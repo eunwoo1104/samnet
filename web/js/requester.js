@@ -60,7 +60,7 @@ const api = (baseURL, keyRequired = true, runAsync = true) => {
             edit: (formData, callback = null, onError = null) => {
                 $.ajax(
                     {
-                        url: baseURL + "/api/user/edit",
+                        url: baseURL + "/api/user",
                         type: "POST",
                         data: formData,
                         processData: false,
