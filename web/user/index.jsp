@@ -77,24 +77,49 @@
                 let badgeIcon = null;
                 let badgeColor = null;
                 let badgeDesc = null;
-                switch (decodeUserFlag(targetUser.flag)) {
+                const userFlag = decodeUserFlag(targetUser.flag);
+                switch (userFlag) {
                     case "admin":
                         badgeIcon = "handyman";
                         badgeColor = "#3366FF";
                         badgeDesc = "SamNet의 관리자입니다."
                         break;
+                    case "verified":
+                        badgeIcon = "verified";
+                        badgeColor = "green";
+                        badgeDesc = "인증된 유저입니다."
+                        break;
                 }
 
                 if (badgeIcon) {
+                    // TODO: multiple icon rendering
                     const badgeContainer = document.createElement("div");
                     badgeContainer.className = "badge-container mt-xs";
+
                     const badge = document.createElement("span");
                     badge.className = "material-icons";
                     badge.textContent = badgeIcon;
                     badge.style.color = badgeColor;
-                    // TODO: icon tooltip
                     badgeContainer.appendChild(badge);
+
+                    const badgeContext = document.createElement("p");
+                    badgeContext.textContent = badgeDesc;
+                    badgeContext.style.marginLeft = "0.3rem";
+                    badgeContext.style.color = badgeColor;
+                    badgeContainer.appendChild(badgeContext);
+
                     renderArea.appendChild(badgeContainer);
+                }
+
+                if (userFlag === "blocked") {
+                    const messageContainer = document.createElement("div");
+                    messageContainer.className = "mt-mid error-box";
+                    const msgContent = document.createElement("p");
+                    msgContent.textContent = "관리자에 의해 차단된 사용자입니다.";
+                    messageContainer.appendChild(msgContent);
+
+                    renderArea.appendChild(messageContainer);
+                    return;
                 }
 
                 // buttons

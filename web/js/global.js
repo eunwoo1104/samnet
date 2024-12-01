@@ -25,12 +25,12 @@ function limitTextLength(text, maxSize) {
 }
 
 function decodeUserFlag(flag) {
-    if (flag & (1 << 0)) {
-        return "admin";;
+    if (flag & (1 << 2)) {
+        return "blocked";
+    } else if (flag & (1 << 0)) {
+        return "admin";
     } else if (flag & (1 << 1)) {
         return "verified";
-    } else if (flag & (1 << 2)) {
-        return "blocked";
     }
 }
 
