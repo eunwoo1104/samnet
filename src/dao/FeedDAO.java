@@ -76,11 +76,12 @@ public class FeedDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM feed WHERE feed.user IN (SELECT target FROM follow WHERE follow.user=?) ORDER BY created_at DESC LIMIT 10 OFFSET ?";
+            String sql = "SELECT * FROM feed WHERE feed.user IN (SELECT target FROM follow WHERE follow.user=?) OR feed.user=? ORDER BY created_at DESC LIMIT 10 OFFSET ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, uid);
-            stmt.setInt(2, 10 * (page > 0 ? page - 1 : 0));
+            stmt.setString(2, uid);
+            stmt.setInt(3, 10 * (page > 0 ? page - 1 : 0));
 
             rs = stmt.executeQuery();
             ArrayList<FeedObj> feeds = new ArrayList<>();
