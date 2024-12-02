@@ -51,6 +51,24 @@ public class UserDAO {
         }
     }
 
+    public boolean invalidateSession(String id) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        try {
+            String sql = "UPDATE user SET session=NULL WHERE id=?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, id);
+
+            int count = stmt.executeUpdate();
+            return count == 1;
+
+        } finally {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
     public boolean exists(String email) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;

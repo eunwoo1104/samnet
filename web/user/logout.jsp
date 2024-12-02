@@ -1,3 +1,4 @@
+<%@ page import="dao.UserDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     if (request.getSession().getAttribute("key") == null) {
@@ -19,6 +20,11 @@
 </html>
 <%
         return;
+    }
+    String userId = (String) request.getSession().getAttribute("id");
+    if (userId != null) {
+        UserDAO userDAO = new UserDAO();
+        userDAO.invalidateSession(userId);
     }
     request.getSession().invalidate();
     response.sendRedirect(request.getContextPath() + "/user/login.jsp?logout=true");
