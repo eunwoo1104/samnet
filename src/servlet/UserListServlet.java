@@ -29,7 +29,15 @@ public class UserListServlet extends HttpServlet {
         if (query == null) {
             query = "";
         }
-        if (!query.contains(" ")) {
+        if (query.length() < 2) {
+            ResponseFormat.sendJSONResponse(
+                    response, 400, ResponseFormat.messageResponse(
+                            400, ResponseFormat.INVALID_DATA, "Query too short"
+                    )
+            );
+            return;
+        }
+        if (!query.isBlank() && !query.contains(" ")) {
             query += "*";
         }
         int page = Integer.parseInt(pageParam == null ? "1" : pageParam);

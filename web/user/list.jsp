@@ -52,7 +52,7 @@
         </h2>
         <form>
             <label class="mb-mid">
-                <input name="query" type="text" placeholder="검색어">
+                <input name="query" type="text" placeholder="검색어" minlength="2" required>
             </label>
             <input class="custom-button mb-mid" type="submit" value="검색" id="submit-input">
         </form>
