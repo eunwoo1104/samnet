@@ -1,0 +1,17 @@
+services:
+  mariadb:
+    image: mariadb:10.5
+    container_name: samnet-mariadb
+    restart: always
+    volumes:
+      - "./data/mariadb:/var/lib/mysql"
+    env_file:
+      - .env
+  tomcat:
+    container_name: tomcat
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./webapps:/usr/local/tomcat/webapps"
+      - "./images:/root/samnet/images"
