@@ -31,4 +31,4 @@ bin/
 .DS_Store
 
 ### Credentials ###
-web/META-INF/context.xml
+# web/META-INF/context.xml

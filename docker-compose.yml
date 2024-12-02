@@ -18,3 +18,5 @@ services:
     volumes:
       - "./webapps:/usr/local/tomcat/webapps"
       - "./images:/root/samnet/images"
+    env_file:
+      - .env
