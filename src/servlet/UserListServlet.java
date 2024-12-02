@@ -29,6 +29,9 @@ public class UserListServlet extends HttpServlet {
         if (query == null) {
             query = "";
         }
+        if (!query.contains(" ")) {
+            query += "*";
+        }
         int page = Integer.parseInt(pageParam == null ? "1" : pageParam);
 
         try {

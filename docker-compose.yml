@@ -7,6 +7,9 @@ services:
       - "./data/mariadb:/var/lib/mysql"
     env_file:
       - .env
+    command:
+      - "mysqld"
+      - "--innodb-ft-min-token-size=2"
   tomcat:
     container_name: tomcat
     build: .
