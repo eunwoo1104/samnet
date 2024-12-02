@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import util.ImageHandler;
 import util.RequestHandler;
 import util.ResponseFormat;
+import util.Utils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
@@ -158,6 +159,16 @@ public class UserServlet extends HttpServlet {
         }
         if (newBio == null) {
             newBio = user.getBio();
+        }
+
+        boolean dataValid = Utils.userEditDataValid(newEmail, newNickname, newUsername, newBio);
+        if (!dataValid) {
+            ResponseFormat.sendJSONResponse(
+                    response, 400, ResponseFormat.messageResponse(
+                            400, ResponseFormat.INVALID_DATA, "Unallowed pattern included"
+                    )
+            );
+            return;
         }
 
         try {

@@ -1,7 +1,9 @@
 package servlet;
 
 import dao.UserDAO;
+import org.apache.commons.validator.routines.EmailValidator;
 import util.ResponseFormat;
+import util.Utils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +30,8 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        if (!username.matches("^[a-zA-Z0-9]+$")) {
+        boolean dataValid = Utils.userDataValid(email, password, nickname, username);
+        if (!dataValid) {
             ResponseFormat.sendJSONResponse(
                     response, 400, ResponseFormat.messageResponse(
                             400, ResponseFormat.INVALID_DATA, "Unallowed pattern included"
