@@ -136,7 +136,7 @@
 
                 // follows
                 const followContainer = document.createElement("div");
-                followContainer.className = "mt-lg mb-lg";
+                followContainer.className = "mt-lg mb-lgp";
                 const followings = document.createElement("p");
                 followings.className = "clickable";
                 followings.innerHTML = "팔로우 <span style='font-weight: 500;'>" + targetUser.followingCount + "</span>명";

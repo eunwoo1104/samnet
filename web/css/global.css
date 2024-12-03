@@ -247,6 +247,14 @@ textarea {
     margin-bottom: 1rem;
 }
 
+.mt-lgp {
+    margin-top: 1.5rem;
+}
+
+.mb-lgp {
+    margin-bottom: 1.5rem;
+}
+
 .mt-xl {
     margin-top: 2rem;
 }
