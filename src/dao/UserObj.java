@@ -9,6 +9,7 @@ public class UserObj {
     private final int ADMIN = 1 << 0;
     private final int VERIFIED = 1 << 1;
     private final int BLOCKED = 1 << 2;
+    private final int EARLY_TESTER = 1 << 3;
 
     public UserObj(String id, String email, String nickname, String username, String bio, String avatar, String createdAt, int flag) {
         this.id = id;
@@ -59,6 +60,10 @@ public class UserObj {
 
     public boolean isBlocked() {
         return (flag & BLOCKED) != 0;
+    }
+
+    public boolean isEarlyTester() {
+        return (flag & EARLY_TESTER) != 0;
     }
 
     public JSONObject toJSON() {

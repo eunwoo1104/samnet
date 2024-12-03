@@ -31,6 +31,8 @@ function decodeUserFlag(flag) {
         return "admin";
     } else if (flag & (1 << 1)) {
         return "verified";
+    } else if (flag & (1 << 3)) {
+        return "early_tester";
     }
 }
 

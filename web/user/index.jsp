@@ -96,6 +96,11 @@
                         badgeColor = "green";
                         badgeDesc = "인증된 유저입니다."
                         break;
+                    case "early_tester":
+                        badgeIcon = "key";
+                        badgeColor = "lightblue";
+                        badgeDesc = "얼리 테스터입니다."
+                        break
                 }
 
                 if (badgeIcon) {
