@@ -30,7 +30,7 @@
 
                     const searchQuery = event.target.query.value;
                     api("${pageContext.request.contextPath}", true, true)
-                        .user.list(page, searchQuery, users => {
+                        .user.list(page, "search", searchQuery, users => {
                             renderList(users, page === 1);
                             if (users.length) {
                                 msg.style.display = "none";

@@ -34,7 +34,7 @@
                         xhr.setRequestHeader("Authorization", sessionKey);
                     },
                     success: data => {
-                        moveto("${redirect}");
+                        moveto("${pageContext.request.contextPath}${redirect}");
                     },
                     error: (xhr, status, error) => {
                         // TODO: different actions per error codes

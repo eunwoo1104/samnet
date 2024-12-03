@@ -26,24 +26,58 @@ public class UserListServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         String query = request.getParameter("query");
         String pageParam = request.getParameter("page");
-        if (query == null) {
-            query = "";
-        }
-        if (query.length() < 2) {
+        String type = request.getParameter("type");
+        if (type == null || type.isBlank()) {
             ResponseFormat.sendJSONResponse(
                     response, 400, ResponseFormat.messageResponse(
-                            400, ResponseFormat.INVALID_DATA, "Query too short"
+                            400, ResponseFormat.MISSING_DATA, "Type not provided"
                     )
             );
             return;
         }
-        if (!query.isBlank() && !query.contains(" ")) {
-            query += "*";
+        if (type.equals("search")) {
+            if (query == null) {
+                query = "";
+            }
+            if (query.length() < 2) {
+                ResponseFormat.sendJSONResponse(
+                        response, 400, ResponseFormat.messageResponse(
+                                400, ResponseFormat.INVALID_DATA, "Query too short"
+                        )
+                );
+                return;
+            }
+            if (!query.isBlank() && !query.contains(" ")) {
+                query += "*";
+            }
+        } else if (!(type.equals("followings") || type.equals("followers"))) {
+            ResponseFormat.sendJSONResponse(
+                    response, 404, ResponseFormat.messageResponse(
+                            404, ResponseFormat.UNSUPPORTED_OPERATION, "Type must be search, followings, or followers"
+                    )
+            );
+            return;
+        } else if (query == null || query.isBlank()) {
+            ResponseFormat.sendJSONResponse(
+                    response, 400, ResponseFormat.messageResponse(
+                            400, ResponseFormat.INVALID_DATA, "No user provided"
+                    )
+            );
+            return;
         }
         int page = Integer.parseInt(pageParam == null ? "1" : pageParam);
 
         try {
-            List<UserObj> users = userDAO.getList(query, page);
+            List<UserObj> users = null;
+            if (type.equals("search")) {
+                users = userDAO.getList(query, page);
+            } else if (type.equals("followings")) {
+                users = userDAO.getFollowingList(query, page);
+            } else if (type.equals("followers")) {
+                users = userDAO.getFollowerList(query, page);
+            } else {
+                return;
+            }
             JSONArray userArr = new JSONArray();
             for (UserObj userObj : users) {
                 userArr.add(userObj.toJSON());

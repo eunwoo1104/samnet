@@ -57,6 +57,9 @@ public class UserServlet extends HttpServlet {
             if (currentUser != null && !currentUser.equals(target)) {
                 resp.put("follows", userDAO.getUserFollows(currentUser, targetUser));
             }
+            int[] followCount = userDAO.getFollowCount(target);
+            resp.put("followingCount", followCount[0]);
+            resp.put("followsCount", followCount[1]);
 
             ResponseFormat.sendJSONResponse(
                     response, 200, ResponseFormat.response(

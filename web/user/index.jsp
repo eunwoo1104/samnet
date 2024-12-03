@@ -66,6 +66,13 @@
                     });
             };
 
+            function onFollowsClick(followType) {
+                let tgtUrl = "${pageContext.request.contextPath}/user/follows.jsp?";
+                tgtUrl += "id=" + targetUser.id;
+                tgtUrl += "&type=" + followType;
+                moveto(tgtUrl);
+            }
+
             window.onload = () => {
                 if (!targetUser) return;
                 const renderArea = document.getElementById("render-area");
@@ -94,7 +101,7 @@
                 if (badgeIcon) {
                     // TODO: multiple icon rendering
                     const badgeContainer = document.createElement("div");
-                    badgeContainer.className = "badge-container mt-xs";
+                    badgeContainer.className = "badge-container mt-sm";
 
                     const badge = document.createElement("span");
                     badge.className = "material-icons";
@@ -122,9 +129,29 @@
                     return;
                 }
 
+                // follows
+                const followContainer = document.createElement("div");
+                followContainer.className = "mt-lg mb-lg";
+                const followings = document.createElement("p");
+                followings.className = "clickable";
+                followings.innerHTML = "팔로우 <span style='font-weight: 500;'>" + targetUser.followingCount + "</span>명";
+                followings.addEventListener("click", () => onFollowsClick("followings"));
+                followContainer.appendChild(followings);
+
+                const spacer = document.createElement("div");
+                spacer.className = "follow-spacer";
+                followContainer.appendChild(spacer);
+
+                const followers = document.createElement("p");
+                followers.className = "clickable";
+                followers.innerHTML = "팔로워 <span style='font-weight: 500;'>" + targetUser.followsCount + "</span>명";
+                followers.addEventListener("click", () => onFollowsClick("followers"))
+                followContainer.appendChild(followers);
+                renderArea.appendChild(followContainer);
+
                 // buttons
                 const buttonContainer = document.createElement("div");
-                buttonContainer.className = "button-container mt-mid mb-mid"
+                buttonContainer.className = "button-container mt-lg mb-mid"
 
                 const followButton = document.createElement("button");
                 followButton.className = "custom-button"
@@ -171,7 +198,7 @@
             .badge-container {
                 display: flex;
                 flex-direction: row;
-                justify-content: center;
+                justify-content: start;
                 align-items: center;
             }
 
@@ -183,10 +210,9 @@
                 padding: 0.3rem;
             }
 
-            @media (min-width: 300px) {
-                .badge-container {
-                    justify-content: start;
-                }
+            .follow-spacer {
+                display: inline-block;
+                width: 1rem;
             }
         </style>
     </jsp:attribute>

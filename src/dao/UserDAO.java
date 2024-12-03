@@ -140,6 +140,29 @@ public class UserDAO {
         }
     }
 
+    public int[] getFollowCount(String id) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT (SELECT COUNT(*) FROM follow WHERE user=?), (SELECT COUNT(*) FROM follow WHERE target=?)";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, id);
+            stmt.setString(2, id);
+
+            rs = stmt.executeQuery();
+            if (!rs.next()) return new int[]{-1, -1};
+
+            return new int[]{rs.getInt(1), rs.getInt(2)};
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
     public String getUIDFromSession(String session) throws SQLException, NamingException {
         Connection conn = ConnectionPool.get();
         PreparedStatement stmt = null;
@@ -173,6 +196,76 @@ public class UserDAO {
             stmt.setString(1, query);
             stmt.setString(2, query);
             stmt.setInt(3, 10 * (page > 0 ? page - 1 : 0));
+
+            rs = stmt.executeQuery();
+            ArrayList<UserObj> users = new ArrayList<>();
+            while (rs.next()) {
+                users.add(new UserObj(
+                        rs.getString("id"),
+                        rs.getString("email"),
+                        rs.getString("nickname"),
+                        rs.getString("username"),
+                        rs.getString("bio"),
+                        rs.getString("avatar"),
+                        rs.getString("created_at"),
+                        rs.getInt("flag")
+                ));
+            }
+
+            return users;
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public ArrayList<UserObj> getFollowingList(String id, int page) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM user WHERE id in (SELECT follow.target FROM follow WHERE user=?) ORDER BY id DESC LIMIT 10 OFFSET ?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, id);
+            stmt.setInt(2, 10 * (page > 0 ? page - 1 : 0));
+
+            rs = stmt.executeQuery();
+            ArrayList<UserObj> users = new ArrayList<>();
+            while (rs.next()) {
+                users.add(new UserObj(
+                        rs.getString("id"),
+                        rs.getString("email"),
+                        rs.getString("nickname"),
+                        rs.getString("username"),
+                        rs.getString("bio"),
+                        rs.getString("avatar"),
+                        rs.getString("created_at"),
+                        rs.getInt("flag")
+                ));
+            }
+
+            return users;
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public ArrayList<UserObj> getFollowerList(String id, int page) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM user WHERE id in (SELECT follow.user FROM follow WHERE target=?) ORDER BY id DESC LIMIT 10 OFFSET ?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, id);
+            stmt.setInt(2, 10 * (page > 0 ? page - 1 : 0));
 
             rs = stmt.executeQuery();
             ArrayList<UserObj> users = new ArrayList<>();

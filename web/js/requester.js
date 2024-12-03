@@ -45,8 +45,9 @@ const api = (baseURL, keyRequired = true, runAsync = true) => {
                 );
                 return result;
             },
-            list: (page, searchQuery, callback = null, onError = null) => {
+            list: (page, listType, searchQuery, callback = null, onError = null) => {
                 let urlQuery = "?page=" + page;
+                urlQuery += "&type=" + listType;
                 urlQuery += "&query=" + searchQuery;
                 $.ajax(
                     {
