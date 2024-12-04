@@ -192,6 +192,12 @@
 
                 // bio
                 if (targetUser.bio) {
+                    const bioTitle = document.createElement("h3");
+                    bioTitle.className = "mt-mid mb-sm";
+                    bioTitle.style.display = "block";
+                    bioTitle.textContent = "소개"
+                    renderArea.appendChild(bioTitle);
+
                     const bio = document.createElement("p");
                     bio.className = "pf-bio"
                     bio.innerHTML = urlToLink(escapeHTML(targetUser.bio, true));
@@ -212,7 +218,13 @@
             }
 
             .pf-bio {
-                padding: 0.3rem;
+                display: block;
+                padding: 0.5rem;
+                background-color: #23272A;
+                border-radius: 0.25rem;
+                outline: none;
+                border-width: 1px;
+                border-color: gray;
             }
 
             .follow-spacer {
