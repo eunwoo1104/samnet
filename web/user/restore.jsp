@@ -37,8 +37,6 @@
                         moveto("${pageContext.request.contextPath}${redirect}");
                     },
                     error: (xhr, status, error) => {
-                        // TODO: different actions per error codes
-                        alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
                         moveto(loginURL);
                     }
                 }

@@ -27,6 +27,7 @@
 
                 api("${pageContext.request.contextPath}", true, true)
                     .user.list(1, "random", null, users => {
+                        if (users.length === 0) return;
                         const renderDiv = document.getElementById("user-list");
                         const randomUserMsg = document.createElement("h3");
                         randomUserMsg.className = "mt-lg mb-mid";

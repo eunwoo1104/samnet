@@ -296,11 +296,12 @@ public class UserDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM user WHERE id NOT IN (SELECT follow.target FROM follow WHERE user=?) ORDER BY RAND() DESC LIMIT ?";
+            String sql = "SELECT * FROM user WHERE id NOT IN (SELECT follow.target FROM follow WHERE user=?) AND NOT id=? ORDER BY RAND() DESC LIMIT ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, id);
-            stmt.setInt(2, limit);
+            stmt.setString(2, id);
+            stmt.setInt(3, limit);
 
             rs = stmt.executeQuery();
             ArrayList<UserObj> users = new ArrayList<>();
