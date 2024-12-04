@@ -2,14 +2,6 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:layout pageName="서비스 이용약관">
     <jsp:attribute name="head">
-        <script>
-            window.onload = () => {
-                const uls = document.getElementsByTagName("ul");
-                for (let i = 0; i < uls.length; i++) {
-                    uls[i].className = "content-margin-left"
-                }
-            }
-        </script>
         <style>
             ul {
                 padding-inline: 0;
@@ -24,6 +16,9 @@
             }
             h3, p, li, ul, ol {
                 margin: 3px 0;
+            }
+            ul {
+                margin-left: 1rem;
             }
         </style>
     </jsp:attribute>

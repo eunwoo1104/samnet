@@ -4,10 +4,6 @@
     <jsp:attribute name="head">
         <script>
             window.onload = () => {
-                const ols = document.getElementsByTagName("ol");
-                for (let i = 0; i < ols.length; i++) {
-                    ols[i].className = "content-margin-left"
-                }
                 const as = document.getElementsByClassName("popup");
                 for (let i = 0; i < as.length; i++) {
                     as[i].target="_blank";
@@ -25,6 +21,9 @@
             }
             h3, p, li, ol, table {
                 margin: 3px 0;
+            }
+            ol {
+                margin-left: 1rem;
             }
             table, th, td {
                 border: 1px solid gray;
