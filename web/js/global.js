@@ -36,6 +36,11 @@ function decodeUserFlag(flag) {
     }
 }
 
+function urlToLink(text) {
+    const urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g
+    return text.replace(urlRegex, matched => `<a href="${matched}" target="_blank" rel="noopener noreferrer">${matched}</a>`);
+}
+
 async function encrypt(text) {
     const encoder = new TextEncoder();
     const pwEncode = encoder.encode(text);

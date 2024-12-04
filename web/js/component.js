@@ -87,7 +87,11 @@ function feedComponent(
 
     const context = document.createElement("p");
     context.className = "feed-context";
-    context.innerHTML = escapeHTML(feed.content, true);
+    let textContent = escapeHTML(feed.content, true);
+    if (!linkToView) {
+        textContent = urlToLink(textContent);
+    }
+    context.innerHTML = textContent;
     container.appendChild(context);
 
     const imageContainer = document.createElement("div");

@@ -194,7 +194,7 @@
                 if (targetUser.bio) {
                     const bio = document.createElement("p");
                     bio.className = "pf-bio"
-                    bio.innerHTML = escapeHTML(targetUser.bio, true);
+                    bio.innerHTML = urlToLink(escapeHTML(targetUser.bio, true));
                     renderArea.appendChild(bio);
                 }
             }
