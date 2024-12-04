@@ -83,5 +83,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="bootstrap-icons" level="application" />
   </component>
 </module>

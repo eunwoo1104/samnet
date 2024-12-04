@@ -24,6 +24,7 @@
     <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0">
     <meta charset="utf-8"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/global.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/component.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
@@ -114,12 +115,12 @@
 </head>
 <body>
 <header class="flex-row" style="align-items: center; justify-content: space-between">
-    <span class="material-icons clickable" style="flex-basis: 0" onclick="handleMenu()">menu</span>
+    <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="handleMenu()">menu</span>
     <h1 class="clickable" style="font-size: 1.5rem" onclick="moveto('${pageContext.request.contextPath}/index.jsp')">
         SamNet
     </h1>
     <% if (session.getAttribute("key") == null) { %>
-    <span class="material-icons clickable" style="flex-basis: 0" onclick="moveto(
+    <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="moveto(
         '${pageContext.request.contextPath}/user/restore.jsp?redirect=' + encodeURIComponent(window.location.href)
             )">login</span>
     <% } else { %>
@@ -142,6 +143,11 @@
             유저 검색
         </a>
     </div>
+    <div>
+        <a href="${pageContext.request.contextPath}/about.jsp">
+            정보
+        </a>
+    </div>
 </div>
 <div class="main-menu content-margin-right" id="account-menu" style="display: none">
     <div>
@@ -152,16 +158,6 @@
     <div>
         <a href="${pageContext.request.contextPath}/user/logout.jsp">
             로그아웃
-        </a>
-    </div>
-    <div>
-        <a href="${pageContext.request.contextPath}/tos.jsp">
-            서비스 이용약관
-        </a>
-    </div>
-    <div>
-        <a href="${pageContext.request.contextPath}/privacy.jsp">
-            개인정보처리방침
         </a>
     </div>
 </div>
