@@ -93,27 +93,27 @@
         </h2>
         <form>
             <label>
-                아이디 (이메일)
+                로그인에 사용할 이메일을 입력해주세요.
                 <input class="mb-mid" name="email" type="email" placeholder="user@example.com"
                        autocomplete="email" required>
             </label>
             <label>
-                비밀번호
+                비밀번호를 입력해주세요.
                 <input class="mb-mid" name="password" type="password" placeholder="비밀번호" id="pw"
                        autocomplete="new-password" required>
             </label>
             <label>
-                비밀번호 확인
+                비밀번호를 다시 입력해주세요.
                 <input class="mb-mid" name="repassword" type="password" placeholder="비밀번호 재입력" id="rpw"
                        autocomplete="new-password" required>
             </label>
             <label>
-                닉네임 (표시할 이름)
+                작성한 피드 등에 표시할 닉네임을 입력해주세요.
                 <input class="mb-mid" name="nickname" type="text" placeholder="닉네임" required>
             </label>
             <label>
-                유저네임
-                <input class="mb-mid" name="username" type="text" placeholder="유저네임" pattern="^[a-zA-Z0-9]+$" required>
+                검색 등에 사용할 유저네임을 입력해주세요. (@username 형태로 노출)
+                <input class="mb-mid" name="username" type="text" placeholder="@username" pattern="^[a-zA-Z0-9]+$" required>
             </label>
             <label>
                 아래 버튼을 눌러 회원가입 시
