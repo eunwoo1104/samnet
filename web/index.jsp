@@ -8,11 +8,24 @@
     }
 %>
 <t:layout>
+    <jsp:attribute name="head">
+        <style>
+            .welcome {
+                text-align: center;
+            }
+
+            @media (min-width: 1024px) {
+                .welcome {
+                    text-align: start;
+                }
+            }
+        </style>
+    </jsp:attribute>
     <jsp:body>
         <h2>
             환영해요!
         </h2>
-        <p style="text-align: center">
+        <p class="welcome">
             로그인 후 SamNet의 SNS 기능을 사용해보세요.
         </p>
         <button class="custom-button mt-mid" onclick="moveto('${pageContext.request.contextPath}/user/restore.jsp')">

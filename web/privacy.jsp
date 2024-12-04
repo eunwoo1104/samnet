@@ -20,7 +20,7 @@
                 font-size: 1.3rem;
             }
             h3, p, li, ol, table {
-                margin: 3px 0;
+                margin: 0.2rem 0;
             }
             ol {
                 margin-left: 1rem;
@@ -34,6 +34,9 @@
             }
             th {
                 background-color: #23272A;
+            }
+            td {
+                text-align: center;
             }
         </style>
     </jsp:attribute>

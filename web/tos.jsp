@@ -15,7 +15,7 @@
                 font-size: 1.3rem;
             }
             h3, p, li, ul, ol {
-                margin: 3px 0;
+                margin: 0.2rem 0;
             }
             ul {
                 margin-left: 1rem;

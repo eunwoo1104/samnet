@@ -7,7 +7,7 @@
                 font-size: 1.3rem;
             }
             h3, p {
-                margin: 3px 0;
+                margin: 0.2rem 0;
             }
             a {
                 text-decoration: none;
@@ -20,7 +20,7 @@
         <p>
             SamNet는 "삼육대학교 네트워크"의 줄임말로, 객체지향프로그래밍2 MySNS 프로젝트 과제를 위해 제작된 서비스입니다.
         </p>
-        <h3>
+        <h3 class="mt-lg">
             문서
         </h3>
         <p class="clickable">
@@ -35,7 +35,7 @@
                 개인정보처리방침
             </a>
         </p>
-        <h3>
+        <h3 class="mt-lg">
             링크
         </h3>
         <p class="clickable">
