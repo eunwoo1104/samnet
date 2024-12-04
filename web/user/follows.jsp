@@ -72,6 +72,7 @@
                 userListArea.appendChild(title);
                 userList.forEach((user, index) => {
                     const userProfile = profileComponent(user, "${pageContext.request.contextPath}", true);
+                    userProfile.className += " clickable";
                     userProfile.addEventListener("click", () => moveto("${pageContext.request.contextPath}/user?id=" + user.id))
                     userListArea.appendChild(userProfile);
                 });
