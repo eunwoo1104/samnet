@@ -25,6 +25,17 @@
                 const form = document.querySelector("form");
                 const msg = document.getElementById("submit-message");
 
+                api("${pageContext.request.contextPath}", true, true)
+                    .user.list(1, "random", null, users => {
+                        const renderDiv = document.getElementById("user-list");
+                        const randomUserMsg = document.createElement("h3");
+                        randomUserMsg.className = "mt-lg mb-mid";
+                        randomUserMsg.textContent = "추천 친구 목록";
+                        renderDiv.appendChild(randomUserMsg);
+
+                        renderList(users, false);
+                }, null);
+
                 form.addEventListener("submit", event => {
                     event.preventDefault();
 

@@ -50,14 +50,14 @@ public class UserListServlet extends HttpServlet {
             if (!query.isBlank() && !query.contains(" ")) {
                 query += "*";
             }
-        } else if (!(type.equals("followings") || type.equals("followers"))) {
+        } else if (!(type.equals("followings") || type.equals("followers") || type.equals("random"))) {
             ResponseFormat.sendJSONResponse(
                     response, 404, ResponseFormat.messageResponse(
-                            404, ResponseFormat.UNSUPPORTED_OPERATION, "Type must be search, followings, or followers"
+                            404, ResponseFormat.UNSUPPORTED_OPERATION, "Type must be search, followings, followers, or random"
                     )
             );
             return;
-        } else if (query == null || query.isBlank()) {
+        } else if (!type.equals("random") && (query == null || query.isBlank())) {
             ResponseFormat.sendJSONResponse(
                     response, 400, ResponseFormat.messageResponse(
                             400, ResponseFormat.INVALID_DATA, "No user provided"
@@ -75,6 +75,8 @@ public class UserListServlet extends HttpServlet {
                 users = userDAO.getFollowingList(query, page);
             } else if (type.equals("followers")) {
                 users = userDAO.getFollowerList(query, page);
+            } else if (type.equals("random")) {
+                users = userDAO.getRandomList(user.getId(), 5);
             } else {
                 return;
             }

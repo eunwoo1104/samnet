@@ -190,7 +190,7 @@ public class UserDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT *, MATCH(email, nickname, username, bio) AGAINST(? in boolean mode) as relevance FROM user WHERE MATCH(email, nickname, username, bio) AGAINST(? in boolean mode) ORDER BY relevance DESC LIMIT 10 OFFSET ?";
+            String sql = "SELECT *, MATCH(email, nickname, username, bio) AGAINST(? in boolean mode) AS relevance FROM user WHERE MATCH(email, nickname, username, bio) AGAINST(? in boolean mode) ORDER BY relevance DESC LIMIT 10 OFFSET ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, query);
@@ -226,7 +226,7 @@ public class UserDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM user WHERE id in (SELECT follow.target FROM follow WHERE user=?) ORDER BY id DESC LIMIT 10 OFFSET ?";
+            String sql = "SELECT * FROM user WHERE id IN (SELECT follow.target FROM follow WHERE user=?) ORDER BY id DESC LIMIT 10 OFFSET ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, id);
@@ -261,11 +261,46 @@ public class UserDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM user WHERE id in (SELECT follow.user FROM follow WHERE target=?) ORDER BY id DESC LIMIT 10 OFFSET ?";
+            String sql = "SELECT * FROM user WHERE id IN (SELECT follow.user FROM follow WHERE target=?) ORDER BY id DESC LIMIT 10 OFFSET ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, id);
             stmt.setInt(2, 10 * (page > 0 ? page - 1 : 0));
+
+            rs = stmt.executeQuery();
+            ArrayList<UserObj> users = new ArrayList<>();
+            while (rs.next()) {
+                users.add(new UserObj(
+                        rs.getString("id"),
+                        rs.getString("email"),
+                        rs.getString("nickname"),
+                        rs.getString("username"),
+                        rs.getString("bio"),
+                        rs.getString("avatar"),
+                        rs.getString("created_at"),
+                        rs.getInt("flag")
+                ));
+            }
+
+            return users;
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+    }
+
+    public ArrayList<UserObj> getRandomList(String id, int limit) throws SQLException, NamingException {
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM user WHERE id NOT IN (SELECT follow.target FROM follow WHERE user=?) ORDER BY RAND() DESC LIMIT ?";
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, id);
+            stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
             ArrayList<UserObj> users = new ArrayList<>();
