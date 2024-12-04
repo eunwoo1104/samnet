@@ -139,7 +139,7 @@
                 followContainer.className = "mt-lg mb-lgp";
                 const followings = document.createElement("p");
                 followings.className = "clickable";
-                followings.innerHTML = "팔로우 <span style='font-weight: 500;'>" + targetUser.followingCount + "</span>명";
+                followings.innerHTML = "팔로우 <span style='font-weight: 600;'>" + targetUser.followingCount + "</span>명";
                 followings.addEventListener("click", () => onFollowsClick("followings"));
                 followContainer.appendChild(followings);
 
@@ -149,7 +149,7 @@
 
                 const followers = document.createElement("p");
                 followers.className = "clickable";
-                followers.innerHTML = "팔로워 <span style='font-weight: 500;'>" + targetUser.followsCount + "</span>명";
+                followers.innerHTML = "팔로워 <span style='font-weight: 600;'>" + targetUser.followsCount + "</span>명";
                 followers.addEventListener("click", () => onFollowsClick("followers"))
                 followContainer.appendChild(followers);
                 renderArea.appendChild(followContainer);

@@ -92,11 +92,62 @@ header, footer, .content {
     margin-right: 1.75rem;
 }
 
+@media (min-width: 640px) {
+    header, footer, .content {
+        padding: 0 4rem;
+    }
+
+
+    .content-margin-left {
+        margin-left: 4rem;
+    }
+
+    .content-margin-right {
+        margin-right: 4rem;
+    }
+}
+
+@media (min-width: 768px) {
+    header, footer, .content {
+        padding: 0 6rem;
+    }
+
+
+    .content-margin-left {
+        margin-left: 6rem;
+    }
+
+    .content-margin-right {
+        margin-right: 6rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    header, footer, .content {
+        padding: 0 20%;
+    }
+
+
+    .content-margin-left {
+        margin-left: 20%;
+    }
+
+    .content-margin-right {
+        margin-right: 20%;
+    }
+}
+
 h2 {
     display: block;
     text-align: center;
     line-height: 4rem;
     font-size: 1.75rem;
+}
+
+@media (min-width: 1024px) {
+    h2 {
+        text-align: left;
+    }
 }
 
 form > label {

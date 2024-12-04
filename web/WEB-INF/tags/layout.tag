@@ -110,15 +110,71 @@
             font-weight: 600;
             padding: 0.1rem;
         }
+
+        .show-on-desktop {
+            display: none;
+        }
+
+        .navbar {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .hide-on-desktop {
+                display: none;
+            }
+
+            .show-on-desktop {
+                display: block;
+            }
+
+            .navbar {
+                display: flex;
+                flex-direction: row;
+                justify-content: start;
+            }
+
+            .navbar > div {
+                margin-left: 1rem;
+            }
+
+            .navbar > div > a {
+                text-decoration: none;
+                font-weight: 500;
+            }
+        }
     </style>
     <jsp:invoke fragment="head"/>
 </head>
 <body>
 <header class="flex-row" style="align-items: center; justify-content: space-between">
-    <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="handleMenu()">menu</span>
+    <span class="material-icons clickable hide-on-desktop" style="flex-basis: 0; font-size: 1.7rem" onclick="handleMenu()">menu</span>
     <h1 class="clickable" style="font-size: 1.5rem" onclick="moveto('${pageContext.request.contextPath}/index.jsp')">
         SamNet
     </h1>
+    <div class="navbar">
+        <div class="clickable">
+            <a href="${pageContext.request.contextPath}/feed">
+                피드 목록
+            </a>
+        </div>
+        <div class="clickable">
+            <a href="${pageContext.request.contextPath}/feed/add.jsp">
+                피드 작성
+            </a>
+        </div>
+        <div class="clickable">
+            <a href="${pageContext.request.contextPath}/user/list.jsp">
+                유저 검색
+            </a>
+        </div>
+        <div class="clickable">
+            <a href="${pageContext.request.contextPath}/about.jsp">
+                정보
+            </a>
+        </div>
+    </div>
+    <div class="show-on-desktop" style="flex-grow: 1"></div>
     <% if (session.getAttribute("key") == null) { %>
     <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="moveto(
         '${pageContext.request.contextPath}/user/restore.jsp?redirect=' + encodeURIComponent(window.location.href)
