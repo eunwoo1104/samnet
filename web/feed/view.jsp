@@ -16,37 +16,14 @@
     }
 
     FeedDAO feedDAO = new FeedDAO();
-    FeedObj feed = feedDAO.get(feedId);
-    if (feed == null) {
+    boolean exists = feedDAO.exists(feedId);
+    if (!exists) {
         pageContext.forward("/404.jsp?type=feed");
         return;
     }
-    int initHeartCount = feedDAO.getHeartCount(feedId);
 
-    UserDAO userDAO = new UserDAO();
-    UserObj author = userDAO.get(feed.getUser());
-    String currentUser = (String) session.getAttribute("id");
-    boolean voted = false;
-    boolean ableToEdit = feed.getUser().equals(currentUser);
-    if (currentUser != null && !currentUser.isBlank()) {
-        voted = userDAO.likedToFeed(currentUser, feedId);
-    }
-    JSONObject feedData = feed.toJSON();
-    UserObj replyAuthor = null;
-    if (feed.getReplyOf() != null) {
-        replyAuthor = userDAO.getAuthor(feed.getReplyOf());
-        feedData.put("replyAuthor", replyAuthor.toJSON());
-    }
-
-    request.setAttribute("feed", Utils.doubleSlash(feedData.toJSONString()));
     request.setAttribute("feedId", feedId);
-    request.setAttribute("initHeartCount", initHeartCount);
-    request.setAttribute("initHeartStyle", voted ? "color: red" : "");
-    request.setAttribute("initHeartIcon", voted ? "favorite" : "favorite_border");
-    request.setAttribute("author", Utils.doubleSlash(author.toJSON().toJSONString()));
     request.setAttribute("fwdFrom" , fwdFrom == null ? "null" : "\"" + fwdFrom + "\"");
-    request.setAttribute("ableToEdit", ableToEdit);
-    request.setAttribute("editButtonDisplay", ableToEdit ? "block" : "none");
 %>
 <t:layout pageName="피드 보기">
     <jsp:attribute name="head">
@@ -54,17 +31,35 @@
         <script type="module" src="https://md-block.verou.me/md-block.js"></script>
         --%>
         <script>
-            // TODO: consider safer method
-            const feed = JSON.parse('${feed}');
-            const author = JSON.parse('${author}');
+            function onError(xhr, status, error) {
+                // TODO: different actions per error codes
+                alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            }
+
+            const viewData = api("${pageContext.request.contextPath}", true, false)
+                .feed.view("${feedId}", null, onError);
+            const author = viewData.author;
             const fwdFrom = ${fwdFrom};
-            const ableToEdit = ${ableToEdit};
+            const ableToEdit = viewData.ableToEdit;
 
             window.onload = () => {
                 const mainFeedArea = document.getElementById("main-feed");
                 mainFeedArea.appendChild(
-                    feedComponent(feed, author, "${pageContext.request.contextPath}")
+                    feedComponent(viewData, author, "${pageContext.request.contextPath}")
                 );
+
+                const heartIcon = document.getElementById("heart-icon");
+                const heartCount = document.getElementById("heart-count");
+                heartCount.textContent = viewData.initHeartCount + "개";
+                if (viewData.voted) {
+                    heartIcon.textContent = "favorite";
+                    heartIcon.style.color = "red";
+                }
+
+                if (ableToEdit) {
+                    const editButton = document.getElementById("edit-button");
+                    editButton.style.display = "block";
+                }
 
                 if (fwdFrom) {
                     const fwdButton = document.getElementById("fwdButton");
@@ -83,25 +78,16 @@
                         return;
                     }
 
-                    const requestData = {feed: feed.idx, heart: true};
+                    const requestData = {feed: viewData.idx, heart: true};
                     api("${pageContext.request.contextPath}", true, true)
                         .feed.action(requestData, res => {
-                            while (likeButton.lastChild) {
-                                likeButton.removeChild(likeButton.lastChild);
-                            }
-
-                            const heartIcon = res.heart ? "favorite" : "favorite_border";
-                            const heartSpan = document.createElement("span");
-                            heartSpan.className = "material-icons";
-                            heartSpan.textContent = heartIcon;
+                            heartIcon.textContent = res.heart ? "favorite" : "favorite_border";
                             if (res.heart) {
-                                heartSpan.style.color = "red";
+                                heartIcon.style.color = "red";
+                            } else {
+                                heartIcon.style.color = "inherit";
                             }
-                            const heartCount = document.createElement("p");
                             heartCount.textContent = res.heartCount + "개";
-
-                            likeButton.appendChild(heartSpan);
-                            likeButton.appendChild(heartCount);
                         }, (xhr, status, error) => {
                             // console.log(xhr);
                             const data = xhr.responseJSON;
@@ -127,7 +113,7 @@
                     const editButton = document.getElementById("edit-button");
                     editButton.addEventListener(
                         "click",
-                        () => moveto("${pageContext.request.contextPath}/feed/edit.jsp?id=" + feed.idx)
+                        () => moveto("${pageContext.request.contextPath}/feed/edit.jsp?id=" + viewData.idx)
                     );
                 }
             };
@@ -148,8 +134,8 @@
         <div id="main-feed"></div>
         <div class="flex-row mt-mid" style="gap: 10px">
             <button class="flex-row buttons-layout clickable" id="like">
-                <span class="material-icons" style="${initHeartStyle}">${initHeartIcon}</span>
-                <p>${initHeartCount}개</p>
+                <span class="material-icons" id="heart-icon">favorite_border</span>
+                <p id="heart-count">0개</p>
             </button>
             <button class="flex-row buttons-layout clickable" id="reply" onclick="moveto('${pageContext.request.contextPath}/feed/add.jsp?reply=${feedId}')">
                 <span class="material-icons">reply</span>
@@ -160,7 +146,7 @@
             <span class="material-icons">redo</span>
             <p>답장 피드로 돌아가기</p>
         </div>
-        <button class="custom-button mt-lg" style="display: ${editButtonDisplay}" id="edit-button">
+        <button class="custom-button mt-lg" style="display: none" id="edit-button">
             피드 수정하기
         </button>
     </jsp:body>

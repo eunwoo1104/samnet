@@ -5,8 +5,9 @@ const api = (baseURL, keyRequired = true, runAsync = true) => {
             dataType: "json",
             async: runAsync,
             beforeSend: xhr => {
-                if (keyRequired)
-                    xhr.setRequestHeader("Authorization", localStorage.getItem("session"));
+                const sessionKey = localStorage.getItem("session");
+                if (keyRequired && sessionKey)
+                    xhr.setRequestHeader("Authorization", sessionKey);
             },
             success: data => {
                 result = data.data;
@@ -149,6 +150,16 @@ const api = (baseURL, keyRequired = true, runAsync = true) => {
                         url: baseURL + "/api/feed/action",
                         type: "POST",
                         data: payload,
+                        ...baseOptions(callback, onError)
+                    }
+                );
+                return result;
+            },
+            view: (feedId, callback = null, onError = null) => {
+                $.ajax(
+                    {
+                        url: baseURL + "/api/feed/view?id=" + feedId,
+                        type: "GET",
                         ...baseOptions(callback, onError)
                     }
                 );
