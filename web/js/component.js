@@ -38,7 +38,7 @@ function feedComponent(
     feedHeader.className = "feed-header";
 
     const authorContainer = document.createElement("div");
-    authorContainer.className = "feed-author-container clickable mb-sm";
+    authorContainer.className = "feed-author-container mb-sm";
     authorContainer.onclick = e => moveto(baseURL + "/user?id=" + author.id);
 
     if (author.avatar) {
@@ -77,10 +77,12 @@ function feedComponent(
         viewButton.appendChild(viewIcon);
         feedHeader.appendChild(viewButton);
         */
-        container.className += " clickable"
+        container.className += " mobile-clickable"
         container.addEventListener("click", e => {
             moveto(baseURL + "/feed/view.jsp?id=" + feed.idx);
         });
+    } else {
+        authorContainer.className += " clickable"
     }
 
     container.appendChild(feedHeader);

@@ -349,6 +349,22 @@ textarea {
     opacity: 75%;
 }
 
+.mobile-clickable {}
+
+.mobile-clickable:hover {
+    cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .mobile-clickable:hover {
+        opacity: 75%;
+    }
+
+    .mobile-clickable:focus-visible {
+        opacity: 75%;
+    }
+}
+
 .bold {
     font-weight: 600;
 }
