@@ -80,6 +80,21 @@
             const rootMessage = document.getElementById("root-message-box");
             rootMessage.style.display = "none";
         }
+
+        function setProgressBar(percent) {
+            const progressBar = document.getElementById("progress-bar");
+            if (!progressBar) return;
+            percent = percent.toFixed();
+            if (percent === 0) {
+                progressBar.style.display = "none";
+                return;
+            }
+            progressBar.style.display = "block";
+            progressBar.style.width = percent + "vw";
+            if (percent >= 100) {
+                sleep(100).then(() => { progressBar.style.display = "none"; });
+            }
+        }
     </script>
     <style>
         .main-menu {
@@ -143,45 +158,53 @@
                 font-weight: 500;
             }
         }
+
+        #progress-bar {
+            background-color: #3366FF;
+            height: 0.25rem;
+        }
     </style>
     <jsp:invoke fragment="head"/>
 </head>
 <body>
-<header class="flex-row" style="align-items: center; justify-content: space-between">
-    <span class="material-icons clickable hide-on-desktop" style="flex-basis: 0; font-size: 1.7rem" onclick="handleMenu()">menu</span>
-    <h1 class="clickable" style="font-size: 1.5rem" onclick="moveto('${pageContext.request.contextPath}/index.jsp')">
-        SamNet
-    </h1>
-    <div class="navbar">
-        <div class="clickable">
-            <a href="${pageContext.request.contextPath}/feed">
-                피드 목록
-            </a>
+<header>
+    <div class="flex-row header-content" style="align-items: center; justify-content: space-between">
+        <span class="material-icons clickable hide-on-desktop" style="flex-basis: 0; font-size: 1.7rem" onclick="handleMenu()">menu</span>
+        <h1 class="clickable" style="font-size: 1.5rem" onclick="moveto('${pageContext.request.contextPath}/index.jsp')">
+            SamNet
+        </h1>
+        <div class="navbar">
+            <div class="clickable">
+                <a href="${pageContext.request.contextPath}/feed">
+                    피드 목록
+                </a>
+            </div>
+            <div class="clickable">
+                <a href="${pageContext.request.contextPath}/feed/add.jsp">
+                    피드 작성
+                </a>
+            </div>
+            <div class="clickable">
+                <a href="${pageContext.request.contextPath}/user/list.jsp">
+                    유저 검색
+                </a>
+            </div>
+            <div class="clickable">
+                <a href="${pageContext.request.contextPath}/about.jsp">
+                    정보
+                </a>
+            </div>
         </div>
-        <div class="clickable">
-            <a href="${pageContext.request.contextPath}/feed/add.jsp">
-                피드 작성
-            </a>
-        </div>
-        <div class="clickable">
-            <a href="${pageContext.request.contextPath}/user/list.jsp">
-                유저 검색
-            </a>
-        </div>
-        <div class="clickable">
-            <a href="${pageContext.request.contextPath}/about.jsp">
-                정보
-            </a>
-        </div>
+        <div class="show-on-desktop" style="flex-grow: 1"></div>
+        <% if (session.getAttribute("key") == null) { %>
+        <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="moveto(
+                '${pageContext.request.contextPath}/user/restore.jsp?redirect=' + encodeURIComponent(window.location.href)
+                )">login</span>
+        <% } else { %>
+        <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="handleAccount()">account_circle</span>
+        <% } %>
     </div>
-    <div class="show-on-desktop" style="flex-grow: 1"></div>
-    <% if (session.getAttribute("key") == null) { %>
-    <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="moveto(
-        '${pageContext.request.contextPath}/user/restore.jsp?redirect=' + encodeURIComponent(window.location.href)
-            )">login</span>
-    <% } else { %>
-    <span class="material-icons clickable" style="flex-basis: 0; font-size: 1.7rem" onclick="handleAccount()">account_circle</span>
-    <% } %>
+    <div style="display: none" id="progress-bar"></div>
 </header>
 <div class="main-menu content-margin-left" id="main-menu" style="display: none">
     <div>

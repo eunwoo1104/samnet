@@ -4,6 +4,19 @@ const api = (baseURL, keyRequired = true, runAsync = true) => {
         return {
             dataType: "json",
             async: runAsync,
+            xhr: () => {
+                const xhr = new XMLHttpRequest();
+
+                const progressEvt = evt => {
+                    if (!evt.lengthComputable) return;
+                    const percent = evt.loaded / evt.total;
+                    setProgressBar(percent * 100);
+                };
+                xhr.addEventListener("progress", progressEvt);
+                xhr.upload.addEventListener("progress", progressEvt);
+
+                return xhr;
+            },
             beforeSend: xhr => {
                 const sessionKey = localStorage.getItem("session");
                 if (keyRequired && sessionKey)

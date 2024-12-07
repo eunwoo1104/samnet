@@ -79,7 +79,7 @@ footer > p {
     font-size: 0.8rem
 }
 
-header, footer, .content {
+.header-content, footer, .content {
     padding: 0 1.75rem;
 }
 
@@ -93,7 +93,7 @@ header, footer, .content {
 }
 
 @media (min-width: 640px) {
-    header, footer, .content {
+    .header-content, footer, .content {
         padding: 0 4rem;
     }
 
@@ -108,7 +108,7 @@ header, footer, .content {
 }
 
 @media (min-width: 768px) {
-    header, footer, .content {
+    .header-content, footer, .content {
         padding: 0 6rem;
     }
 
@@ -123,7 +123,7 @@ header, footer, .content {
 }
 
 @media (min-width: 1024px) {
-    header, footer, .content {
+    .header-content, footer, .content {
         padding: 0 20%;
     }
 
