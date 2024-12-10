@@ -52,7 +52,7 @@
                 const feedListArea = document.getElementById("feed-list");
                 if (feedList.length === 0) {
                     const noFeed = document.createElement("p");
-                    noFeed.className = "not-found mb-sm";
+                    noFeed.className = "not-found mb-sm mt-mid";
                     noFeed.textContent = "볼 수 있는 피드가 없어요.";
                     feedListArea.appendChild(noFeed);
                     if (!targetUser) {
@@ -94,7 +94,7 @@
                 font-size: 1.4rem;
                 font-weight: bold;
                 text-align: center;
-                margin-top: 30vh;
+                /* margin-top: 30vh; */
             }
 
             #feed-list {
