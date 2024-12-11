@@ -9,7 +9,7 @@
             h3, p {
                 margin: 0.2rem 0;
             }
-            a {
+            .content a {
                 text-decoration: none;
             }
         </style>
